@@ -11,6 +11,7 @@ import {
   exportOrdersCSV,
   getDuration,
 } from '../utils/analytics';
+import { formatOrderLine } from '../utils/cartMods';
 import { fmtMoney, fmtSecs } from '../utils/format';
 
 interface AnalyticsViewProps {
@@ -447,7 +448,7 @@ export default function AnalyticsView({ orders, stats, onReset }: AnalyticsViewP
                   #{order.id} · Sec {order.section} ·{' '}
                   {order.fulfillment === 'delivery' ? `🛵 ${order.runner}` : `Win ${order.window}`}
                 </div>
-                <div style={S.feedSub}>{order.items.map((i) => `${i.qty}× ${i.name}`).join(', ')}</div>
+                <div style={S.feedSub}>{order.items.map((i) => formatOrderLine(i)).join(', ')}</div>
               </div>
             </div>
             <div style={S.feedAmt}>{fmtMoney(order.total)}</div>

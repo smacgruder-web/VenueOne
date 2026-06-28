@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import OrderFoodStrip from '../components/OrderFoodStrip';
 import { S } from '../styles/venueStyles';
+import { formatOrderLine } from '../utils/cartMods';
 import type { Fulfillment, Order, OrderStatus } from '../types/venue';
 import { fmtMoney, fmtTime } from '../utils/format';
 import { nextAction, playChime } from '../utils/order';
@@ -137,9 +138,7 @@ export default function StaffView({ orders, updateStatus }: StaffViewProps) {
                 <OrderFoodStrip items={order.items} size="sm" />
                 <div style={S.orderItems}>
                   {order.items.map((i, idx) => (
-                    <div key={idx}>
-                      {i.qty}× {i.name}
-                    </div>
+                    <div key={idx}>{formatOrderLine(i)}</div>
                   ))}
                 </div>
                 <div style={S.orderTotal}>{fmtMoney(order.total)}</div>

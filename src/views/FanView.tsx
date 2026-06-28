@@ -7,9 +7,18 @@ import MotionSheet from '../components/MotionSheet';
 import OrderFoodStrip from '../components/OrderFoodStrip';
 import { MENU, SECTIONS, DELIVERY_FEE } from '../data/constants';
 import { S } from '../styles/venueStyles';
-import type { CartItem, FanIdentity, Fulfillment, Order } from '../types/venue';
+import type { CartItem, FanIdentity, Fulfillment, ModSelection, Order } from '../types/venue';
+import {
+  buildCartLineKey,
+  cartItemsFromLines,
+  defaultModsForItem,
+  formatModsSummary,
+  formatOrderLine,
+} from '../utils/cartMods';
 import { fmtMoney, fmtTime } from '../utils/format';
 import { playChime } from '../utils/order';
+
+type CartLines = Record<string, { qty: number; mods: ModSelection[] }>;
 
 interface FanViewProps {
   onOrder: (
@@ -27,7 +36,8 @@ type CategoryFilter = 'All' | 'Food' | 'Drinks';
 
 export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) {
   const [cat, setCat] = useState<CategoryFilter>('All');
-  const [cart, setCart] = useState<Record<number, number>>({});
+  const [cartLines, setCartLines] = useState<CartLines>({});
+  const [pendingMods, setPendingMods] = useState<Record<number, ModSelection[]>>({});
   const [section] = useState(SECTIONS[2]);
   const [fulfillment, setFulfillment] = useState<Fulfillment>('pickup');
   const [seatRow, setSeatRow] = useState('');
@@ -45,13 +55,18 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
 
   const cats: CategoryFilter[] = ['All', 'Food', 'Drinks'];
   const filtered = cat === 'All' ? MENU : MENU.filter((m) => m.cat === cat);
-  const cartItems: CartItem[] = Object.entries(cart)
-    .filter(([, q]) => q > 0)
-    .map(([id, qty]) => {
-      const item = MENU.find((m) => m.id === Number(id));
-      return item ? { ...item, qty } : null;
-    })
-    .filter((item): item is CartItem => item != null);
+  const cartItems: CartItem[] = cartItemsFromLines(cartLines, MENU);
+
+  const getMods = (itemId: number) => pendingMods[itemId] ?? defaultModsForItem(itemId);
+
+  const getQty = (itemId: number) => {
+    const key = buildCartLineKey(itemId, getMods(itemId));
+    return cartLines[key]?.qty ?? 0;
+  };
+
+  const setMods = (itemId: number, mods: ModSelection[]) => {
+    setPendingMods((prev) => ({ ...prev, [itemId]: mods }));
+  };
   const itemsTotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
   const cartTotal = itemsTotal + (fulfillment === 'delivery' ? DELIVERY_FEE : 0);
   const tipAmount = fulfillment === 'delivery' ? Math.round(itemsTotal * tipPct * 100) / 100 : 0;
@@ -60,8 +75,19 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
   const isDelivery = confirmedOrder?.fulfillment === 'delivery';
   const claimed = !!confirmedOrder?.runner;
 
-  const setQty = (id: number, delta: number) =>
-    setCart((prev) => ({ ...prev, [id]: Math.max(0, (prev[id] || 0) + delta) }));
+  const setQty = (id: number, delta: number) => {
+    const mods = getMods(id);
+    const key = buildCartLineKey(id, mods);
+    setCartLines((prev) => {
+      const current = prev[key]?.qty ?? 0;
+      const nextQty = Math.max(0, current + delta);
+      if (nextQty === 0) {
+        const { [key]: _, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [key]: { qty: nextQty, mods } };
+    });
+  };
 
   const placeOrder = () => {
     const seatInfo =
@@ -71,15 +97,21 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
     const order = onOrder(cartItems, section, fulfillment, seatInfo, tipAmount);
     trackOrder(order.id);
     setShowCheckout(false);
-    setCart({});
+    setCartLines({});
+    setPendingMods({});
   };
 
   const reorder = (entry: Order) => {
-    const newCart: Record<number, number> = {};
+    const nextLines: CartLines = {};
+    const nextMods: Record<number, ModSelection[]> = {};
     entry.items.forEach((i) => {
-      newCart[i.id] = i.qty;
+      const mods = i.mods ?? defaultModsForItem(i.id);
+      const key = i.lineKey ?? buildCartLineKey(i.id, mods);
+      nextLines[key] = { qty: i.qty, mods };
+      nextMods[i.id] = mods;
     });
-    setCart(newCart);
+    setCartLines(nextLines);
+    setPendingMods(nextMods);
     setFulfillment(entry.fulfillment || 'pickup');
     setShowHistory(false);
     setActiveOrderId(null);
@@ -354,13 +386,15 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
           </div>
           <div className="menu-grid">
             {filtered.map((item, index) => {
-              const qty = cart[item.id] || 0;
+              const qty = getQty(item.id);
               return (
                 <MenuItemCard
                   key={item.id}
                   item={item}
                   qty={qty}
                   index={index}
+                  mods={getMods(item.id)}
+                  onModsChange={(mods) => setMods(item.id, mods)}
                   onAdd={() => setQty(item.id, 1)}
                   onInc={() => setQty(item.id, 1)}
                   onDec={() => setQty(item.id, -1)}
@@ -386,22 +420,28 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
 
           <MotionSheet open={showCheckout} onClose={() => setShowCheckout(false)}>
                 <div style={S.sheetTitle}>Your Order</div>
-                {cartItems.map((i) => (
-                  <div key={i.id} style={{ ...S.lineItem, alignItems: 'center', gap: 10 }}>
-                    <div className="flex items-center gap-2.5">
-                      <FoodImage
-                        src={i.image}
-                        alt={i.name}
-                        emoji={i.emoji}
-                        className="h-10 w-10 rounded-lg object-cover ring-1 ring-[#F5A62344]"
-                      />
-                      <span>
-                        {i.qty}× {i.name}
-                      </span>
+                {cartItems.map((i) => {
+                  const modSummary = formatModsSummary(i.mods);
+                  return (
+                    <div key={i.lineKey ?? i.id} style={{ ...S.lineItem, alignItems: 'center', gap: 10 }}>
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <FoodImage
+                          src={i.image}
+                          alt={i.name}
+                          emoji={i.emoji}
+                          className="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-[#F5A62344]"
+                        />
+                        <span className="min-w-0">
+                          <span className="block">{i.qty}× {i.name}</span>
+                          {modSummary && (
+                            <span className="block text-[11px] text-[#8B95A8]">{modSummary}</span>
+                          )}
+                        </span>
+                      </div>
+                      <span style={{ color: '#F8F9FC' }}>{fmtMoney(i.price * i.qty)}</span>
                     </div>
-                    <span style={{ color: '#F8F9FC' }}>{fmtMoney(i.price * i.qty)}</span>
-                  </div>
-                ))}
+                  );
+                })}
                 {fulfillment === 'delivery' && (
                   <div style={S.lineItem}>
                     <span>🛵 Seat delivery fee</span>
@@ -480,7 +520,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                   <span style={{ color: '#F5A623' }}>{fmtMoney(h.total)}</span>
                 </div>
                 <div style={S.historyItems}>
-                  {h.items.map((i) => `${i.qty}× ${i.name}`).join(', ')} · {fmtTime(h.ts)} ·{' '}
+                  {h.items.map((i) => formatOrderLine(i)).join(', ')} · {fmtTime(h.ts)} ·{' '}
                   {h.status}
                   {h.tip > 0 ? ` · ${fmtMoney(h.tip)} tip` : ''}
                 </div>

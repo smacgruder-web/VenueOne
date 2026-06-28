@@ -296,6 +296,84 @@ body {
   50% { box-shadow: 0 12px 40px rgba(245,166,35,0.35); }
 }
 
+.menu-card-flip {
+  perspective: 1000px;
+}
+
+.menu-card-flip-inner {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.menu-card-flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.menu-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.menu-card-back {
+  transform: rotateY(180deg);
+}
+
+.menu-photo-flip-btn {
+  display: block;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.menu-flip-hint {
+  opacity: 0.92;
+}
+
+.menu-mods-panel {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.menu-mod-chip {
+  min-height: 1.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 166, 35, 0.22);
+  background: rgba(17, 24, 39, 0.9);
+  color: #c9d2e0;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  touch-action: manipulation;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.menu-mod-chip--active {
+  border-color: #f5a623;
+  background: rgba(245, 166, 35, 0.22);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(245, 166, 35, 0.2);
+}
+
+.menu-mod-chip:active {
+  transform: scale(0.97);
+}
+
+.menu-card-back-header {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
 .menu-card-scrim {
   background:
     linear-gradient(180deg, transparent 0%, transparent 45%, rgba(6, 12, 24, 0.25) 68%, rgba(6, 12, 24, 0.55) 100%);
@@ -379,8 +457,11 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   transition: box-shadow 0.3s ease;
   isolation: isolate;
-  contain: layout paint;
   touch-action: manipulation;
+}
+
+.menu-food-card.menu-card-flip {
+  overflow: hidden;
 }
 
 .menu-food-card--active {

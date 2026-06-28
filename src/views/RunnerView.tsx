@@ -2,6 +2,7 @@ import OrderFoodStrip from '../components/OrderFoodStrip';
 import { RUNNERS } from '../data/constants';
 import { S } from '../styles/venueStyles';
 import type { Order, OrderStatus, RunnerIdentity } from '../types/venue';
+import { formatOrderLine } from '../utils/cartMods';
 import { fmtMoney, fmtTime } from '../utils/format';
 
 interface RunnerViewProps {
@@ -78,9 +79,7 @@ export default function RunnerView({ orders, claimOrder, updateStatus, runnerIde
                 <OrderFoodStrip items={order.items} size="sm" />
                 <div style={S.orderItems}>
                   {order.items.map((i, idx) => (
-                    <div key={idx}>
-                      {i.qty}× {i.name}
-                    </div>
+                    <div key={idx}>{formatOrderLine(i)}</div>
                   ))}
                 </div>
                 <div style={S.orderTotal}>
@@ -117,9 +116,7 @@ export default function RunnerView({ orders, claimOrder, updateStatus, runnerIde
                 <OrderFoodStrip items={order.items} size="sm" />
                 <div style={S.orderItems}>
                   {order.items.map((i, idx) => (
-                    <div key={idx}>
-                      {i.qty}× {i.name}
-                    </div>
+                    <div key={idx}>{formatOrderLine(i)}</div>
                   ))}
                 </div>
                 <div style={S.orderTotal}>
@@ -145,7 +142,7 @@ export default function RunnerView({ orders, claimOrder, updateStatus, runnerIde
                 <div style={S.feedText}>
                   #{order.id} · {order.seat}
                 </div>
-                <div style={S.feedSub}>{order.items.map((i) => `${i.qty}× ${i.name}`).join(', ')}</div>
+                <div style={S.feedSub}>{order.items.map((i) => formatOrderLine(i)).join(', ')}</div>
               </div>
             </div>
             <div style={S.feedAmt}>

@@ -2,6 +2,25 @@ export type OrderStatus = 'received' | 'preparing' | 'ready' | 'delivered';
 export type Fulfillment = 'pickup' | 'delivery';
 export type ViewId = 'fan' | 'staff' | 'runners' | 'analytics';
 
+export interface MenuModOption {
+  id: string;
+  label: string;
+}
+
+export interface MenuModGroup {
+  id: string;
+  label: string;
+  type: 'single';
+  options: MenuModOption[];
+}
+
+export interface ModSelection {
+  groupId: string;
+  groupLabel: string;
+  optionId: string;
+  optionLabel: string;
+}
+
 export interface MenuItem {
   id: number;
   name: string;
@@ -15,6 +34,8 @@ export interface MenuItem {
 
 export interface CartItem extends MenuItem {
   qty: number;
+  mods?: ModSelection[];
+  lineKey?: string;
 }
 
 export interface StatusEvent {
