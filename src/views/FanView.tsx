@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import FoodHero from '../components/FoodHero';
+import LiveEventBadge from '../components/LiveEventBadge';
 import FoodImage from '../components/FoodImage';
 import MenuItemCard from '../components/MenuItemCard';
 import MenuItemDetailPage from '../components/MenuItemDetailPage';
@@ -321,10 +322,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
         <>
           <div style={S.fanHeader}>
             <div style={S.fanHeaderTop}>
-              <div style={S.liveTag}>
-                <div style={S.liveDot} />
-                LIVE · Q2 14:32
-              </div>
+              <LiveEventBadge />
               <button style={S.historyBtn} onClick={() => setShowHistory(true)}>
                 📋 My Orders{history.length > 0 ? ` (${history.length})` : ''}
               </button>
