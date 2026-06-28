@@ -335,7 +335,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-2 gap-2.5 px-4 py-3 sm:gap-3">
+          <div className="grid grid-cols-2 gap-3 px-4 py-3">
             {filtered.map((item, index) => {
               const qty = cart[item.id] || 0;
               return (

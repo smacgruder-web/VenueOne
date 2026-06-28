@@ -121,19 +121,18 @@ body {
 
 .menu-food-card {
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  transition: box-shadow 0.3s ease;
+  isolation: isolate;
 }
 
 .menu-food-card img {
-  image-rendering: auto;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  object-fit: cover;
+  object-position: center;
 }
 
 .menu-food-card:hover {
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(245, 166, 35, 0.12);
+  animation: warm-pulse 2s ease-in-out infinite;
 }
 
 .cat-pill-food.cat-active {
