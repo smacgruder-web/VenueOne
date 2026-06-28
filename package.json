@@ -1,5 +1,5 @@
 {
-  "name": "venue-one",
+  "name": "venueone",
   "version": "1.0.0",
   "description": "Venue One — Stadium concession ordering system (Fan + Staff + Runner + GM Analytics)",
   "type": "module",
@@ -13,7 +13,7 @@
     "restaurant",
     "ordering",
     "dashboard",
-    "peculiar-ai"
+    "venueone"
   ],
   "author": "Peculiar AI Labs",
   "license": "MIT",

@@ -1,6 +1,8 @@
-# Venue One - Riverside Arena Dashboard
+# VenueOne
 
-A modern restaurant ordering and management dashboard for the Riverside Arena event space.
+Stadium concession ordering platform for Riverside Arena — Fan ordering, Staff fulfillment, Runner dispatch, and GM Analytics.
+
+**Repository:** [github.com/smacgruder-web/VenueOne](https://github.com/smacgruder-web/VenueOne)
 
 ## Features
 
@@ -70,7 +72,7 @@ VenueOne/
 1. Ensure Node.js 18+ is installed
 2. Run `npm install` to install dependencies
 3. Run `npm run dev` to start the development server
-4. Open your browser to `http://localhost:3000`
+4. Open your browser to `http://localhost:5173`
 
 ## Development Notes
 
