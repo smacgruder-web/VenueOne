@@ -25,7 +25,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
       whileTap={{ scale: 0.98 }}
       onClick={() => qty === 0 && onAdd()}
     >
-      <div className="relative aspect-[5/4] overflow-hidden bg-[#060C18]">
+      <div className="relative aspect-[16/9] overflow-hidden bg-[#060C18]">
         <FoodImage
           src={item.image}
           alt={item.name}
