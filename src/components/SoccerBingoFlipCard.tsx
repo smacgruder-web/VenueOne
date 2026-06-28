@@ -5,48 +5,85 @@ interface SoccerBingoFlipCardProps {
   onPlay: () => void;
 }
 
+const MINI_EVENTS = ['⚽', '🟨', '🚩', '🧤', '⭐', 'FREE', '📣', '🎯'];
+
 export default function SoccerBingoFlipCard({ onPlay }: SoccerBingoFlipCardProps) {
   const [flipped, setFlipped] = useState(false);
+
+  const handlePlay = () => {
+    setFlipped(false);
+    onPlay();
+  };
 
   return (
     <article className={`soccer-bingo-flip ${flipped ? 'is-flipped' : ''}`}>
       <div className="soccer-bingo-flip-inner">
-        <button
-          type="button"
-          className="soccer-bingo-flip-face soccer-bingo-flip-front"
-          onClick={() => setFlipped(true)}
-          aria-label="Flip to see Soccer Bingo prizes"
-        >
-          <div
-            className="soccer-bingo-flip-photo"
-            style={{ backgroundImage: "url('/images/soccer-ball.png')" }}
-          />
-          <div className="soccer-bingo-flip-scrim" />
+        <div className="soccer-bingo-flip-face soccer-bingo-flip-front">
+          <button
+            type="button"
+            className="soccer-bingo-flip-tap"
+            onClick={() => setFlipped(true)}
+            aria-label="Flip Soccer Bingo card"
+          >
+            <div
+              className="soccer-bingo-flip-photo"
+              style={{ backgroundImage: "url('/images/soccer-ball.png')" }}
+            />
+            <div className="soccer-bingo-flip-scrim" />
+          </button>
           <span className="soccer-bingo-flip-hint">Tap to flip</span>
           <div className="soccer-bingo-flip-caption">
-            <h3>⚽ Soccer Bingo</h3>
-            <p>Play &amp; win prizes</p>
+            <div className="soccer-bingo-flip-info">
+              <h3>⚽ Soccer Bingo</h3>
+              <p>Flip for prizes</p>
+            </div>
           </div>
-        </button>
+        </div>
 
         <div className="soccer-bingo-flip-face soccer-bingo-flip-back">
-          <p className="soccer-bingo-flip-back-title">Match Night Prizes</p>
-          <ul className="soccer-bingo-flip-prizes">
-            <li>🛵 Free seat delivery</li>
-            <li>💵 $5 off coupon</li>
-          </ul>
-          <p className="soccer-bingo-flip-copy">Mark five in a row while the match plays. Winners get rewards to use during the game.</p>
-          <motion.button
+          <button
             type="button"
-            className="soccer-bingo-flip-play"
-            onClick={onPlay}
-            whileTap={{ scale: 0.97 }}
-          >
-            Play Now →
-          </motion.button>
-          <button type="button" className="soccer-bingo-flip-back-btn" onClick={() => setFlipped(false)}>
-            ↩ Flip Back
-          </button>
+            className="soccer-bingo-flip-tap soccer-bingo-flip-tap--back"
+            onClick={() => setFlipped(false)}
+            aria-label="Flip card back to front"
+          />
+          <div className="soccer-bingo-flip-back-bg" />
+          <div className="soccer-bingo-flip-back-content">
+            <p className="soccer-bingo-flip-back-kicker">Match Night Game</p>
+            <h3 className="soccer-bingo-flip-back-title">Soccer Bingo</h3>
+            <p className="soccer-bingo-flip-back-sub">Get 5 in a row during the match</p>
+
+            <div className="soccer-bingo-flip-mini" aria-hidden>
+              {MINI_EVENTS.map((cell, i) => (
+                <span
+                  key={i}
+                  className={`soccer-bingo-flip-mini-cell ${i === 5 ? 'soccer-bingo-flip-mini-cell--free' : ''}`}
+                >
+                  {cell}
+                </span>
+              ))}
+            </div>
+
+            <div className="soccer-bingo-flip-prize-row">
+              <span className="soccer-bingo-flip-prize-chip">🛵 Free Delivery</span>
+              <span className="soccer-bingo-flip-prize-chip">💵 $5 Off</span>
+            </div>
+          </div>
+
+          <div className="soccer-bingo-flip-caption soccer-bingo-flip-caption--back">
+            <button type="button" className="soccer-bingo-flip-info soccer-bingo-flip-info--back" onClick={() => setFlipped(false)}>
+              <span className="soccer-bingo-flip-back-link">↩ Tap card to flip</span>
+            </button>
+            <motion.button
+              type="button"
+              className="soccer-bingo-flip-play"
+              onClick={handlePlay}
+              whileTap={{ scale: 0.94 }}
+              aria-label="Play Soccer Bingo now"
+            >
+              Play Now
+            </motion.button>
+          </div>
         </div>
       </div>
     </article>
