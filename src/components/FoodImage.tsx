@@ -26,6 +26,7 @@ export default function FoodImage({ src, alt, className = '', fallback, emoji }:
       className={className}
       loading="lazy"
       decoding="async"
+      sizes="(max-width: 640px) 50vw, 280px"
       onError={() => setFailed(true)}
     />
   );
