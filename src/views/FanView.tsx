@@ -6,8 +6,9 @@ import FoodImage from '../components/FoodImage';
 import MenuItemCard from '../components/MenuItemCard';
 import MenuItemDetailPage from '../components/MenuItemDetailPage';
 import MotionSheet from '../components/MotionSheet';
-import SoccerBingoFlipCard from '../components/SoccerBingoFlipCard';
+import SoccerBingoInvitePage from '../components/SoccerBingoInvitePage';
 import SoccerBingoPage from '../components/SoccerBingoPage';
+import SoccerBingoPromoCard from '../components/SoccerBingoPromoCard';
 import OrderFoodStrip from '../components/OrderFoodStrip';
 import { MENU, SECTIONS, DELIVERY_FEE } from '../data/constants';
 import { S } from '../styles/venueStyles';
@@ -38,7 +39,10 @@ interface FanViewProps {
   orders: Order[];
   fanIdentity: FanIdentity;
   bingo: SoccerBingoApi;
+  showBingoInvite: boolean;
   showBingo: boolean;
+  onOpenBingoInvite: () => void;
+  onCloseBingoInvite: () => void;
   onOpenBingo: () => void;
   onCloseBingo: () => void;
 }
@@ -50,7 +54,10 @@ export default function FanView({
   orders,
   fanIdentity,
   bingo,
+  showBingoInvite,
   showBingo,
+  onOpenBingoInvite,
+  onCloseBingoInvite,
   onOpenBingo,
   onCloseBingo,
 }: FanViewProps) {
@@ -347,7 +354,7 @@ export default function FanView({
             <div style={S.fanHeaderTop}>
               <div className="flex items-center gap-2">
                 <LiveEventBadge />
-                <button type="button" className="soccer-bingo-header-cta soccer-bingo-header-cta--compact md:hidden" onClick={onOpenBingo}>
+                <button type="button" className="soccer-bingo-header-cta soccer-bingo-header-cta--compact md:hidden" onClick={onOpenBingoInvite}>
                   ⚽ Bingo
                 </button>
               </div>
@@ -421,7 +428,7 @@ export default function FanView({
                 const nodes = [];
                 if (item.cat === 'Food') {
                   if (foodCount === 2) {
-                    nodes.push(<SoccerBingoFlipCard key="soccer-bingo-flip" onPlay={onOpenBingo} />);
+                    nodes.push(<SoccerBingoPromoCard key="soccer-bingo-promo" onOpen={onOpenBingoInvite} />);
                   }
                   foodCount += 1;
                 }
@@ -442,6 +449,11 @@ export default function FanView({
               });
             })()}
           </div>
+          <SoccerBingoInvitePage
+            open={showBingoInvite}
+            onClose={onCloseBingoInvite}
+            onPlay={onOpenBingo}
+          />
           <SoccerBingoPage
             open={showBingo}
             state={bingoState}

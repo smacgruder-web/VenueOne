@@ -20,6 +20,7 @@ const viewVariants = {
 
 export default function App() {
   const [view, setView] = useState<ViewId>('fan');
+  const [showBingoInvite, setShowBingoInvite] = useState(false);
   const [showBingo, setShowBingo] = useState(false);
   const bingo = useSoccerBingo();
   const venueState = useVenueState();
@@ -49,7 +50,7 @@ export default function App() {
         onChange={setView}
         onOpenBingo={() => {
           setView('fan');
-          setShowBingo(true);
+          setShowBingoInvite(true);
         }}
       />
 
@@ -69,8 +70,14 @@ export default function App() {
               orders={orders}
               fanIdentity={fanIdentity}
               bingo={bingo}
+              showBingoInvite={showBingoInvite}
               showBingo={showBingo}
-              onOpenBingo={() => setShowBingo(true)}
+              onOpenBingoInvite={() => setShowBingoInvite(true)}
+              onCloseBingoInvite={() => setShowBingoInvite(false)}
+              onOpenBingo={() => {
+                setShowBingoInvite(false);
+                setShowBingo(true);
+              }}
               onCloseBingo={() => setShowBingo(false)}
             />
           )}
