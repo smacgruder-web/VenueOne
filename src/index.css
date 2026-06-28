@@ -376,31 +376,26 @@ body {
 
 .menu-card-scrim {
   background:
-    linear-gradient(180deg, transparent 0%, transparent 45%, rgba(6, 12, 24, 0.25) 68%, rgba(6, 12, 24, 0.55) 100%);
+    linear-gradient(180deg, transparent 0%, transparent 62%, rgba(6, 12, 24, 0.18) 78%, rgba(6, 12, 24, 0.42) 100%);
 }
 
 .menu-card-caption {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(6, 12, 24, 0.72) 28%,
-    rgba(6, 12, 24, 0.96) 100%
+    rgba(6, 12, 24, 0.45) 42%,
+    rgba(6, 12, 24, 0.9) 100%
   );
-  min-height: 4.75rem;
-  padding-top: 1.75rem;
-  transition: min-height 0.2s ease, padding-top 0.2s ease;
 }
 
 .menu-card-caption--expanded {
-  min-height: 6.5rem;
-  padding-top: 2.5rem;
   align-items: stretch;
 }
 
 .menu-card-info-btn {
   display: block;
-  min-height: 2.75rem;
-  padding: 0.4rem 0.55rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.5rem;
   border-radius: 0.625rem;
   background: rgba(6, 12, 24, 0.55);
   border: 1px solid rgba(245, 166, 35, 0.22);
@@ -437,16 +432,6 @@ body {
 }
 
 @media (min-width: 640px) {
-  .menu-card-caption {
-    min-height: 5.5rem;
-    padding-top: 2.25rem;
-  }
-
-  .menu-card-caption--expanded {
-    min-height: 7.25rem;
-    padding-top: 3rem;
-  }
-
   .menu-card-info-btn {
     min-height: 3rem;
     padding: 0.5rem 0.625rem;
