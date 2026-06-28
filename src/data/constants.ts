@@ -1,6 +1,27 @@
 import type { EventStats, MenuItem } from '../types/venue';
 
-const menuImg = (slug: string) => `/images/menu/${slug}.jpg`;
+export const MENU_IMG_VERSION = '4';
+
+const menuImg = (slug: string) => `/images/menu/${slug}.jpg?v=${MENU_IMG_VERSION}`;
+
+export const menuImageUrl = (slug: string) => menuImg(slug);
+
+export const MENU_IMAGE_URLS = [
+  'stadium-dog',
+  'nachos',
+  'pretzel',
+  'burger',
+  'chicken-tenders',
+  'pizza-slice',
+  'domestic-beer',
+  'craft-beer',
+  'hard-seltzer',
+  'soda',
+  'water',
+  'loaded-fries',
+].map(menuImg);
+
+export const HERO_IMAGE_URLS = ['stadium-dog', 'nachos', 'craft-beer'].map(menuImg);
 
 export const MENU: MenuItem[] = [
   {

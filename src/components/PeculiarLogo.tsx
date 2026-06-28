@@ -1,75 +1,64 @@
-import { motion } from 'framer-motion';
-
-const NODES = [
-  { x: 16, y: 8, color: '#0EA5A0' },
-  { x: 28, y: 16, color: '#F97316' },
-  { x: 24, y: 28, color: '#0EA5A0' },
-  { x: 8, y: 28, color: '#EF4444' },
-  { x: 4, y: 16, color: '#14B8A6' },
-  { x: 16, y: 20, color: '#F5A623' },
-];
-
-const EDGES: [number, number][] = [
-  [0, 1], [1, 2], [2, 3], [3, 4], [4, 0],
-  [0, 5], [1, 5], [2, 5], [3, 5], [4, 5],
-  [0, 2], [1, 3],
-];
+import type { CSSProperties } from 'react';
 
 interface PeculiarLogoProps {
   size?: number;
 }
 
-export default function PeculiarLogo({ size = 32 }: PeculiarLogoProps) {
+const PIXIE_DUST = [
+  { x: -18, y: -12, c: '#F5A623', s: 3, d: 0, dur: 2.2 },
+  { x: 20, y: -10, c: '#FFF8E7', s: 2, d: 0.35, dur: 1.8 },
+  { x: -14, y: 16, c: '#0EA5A0', s: 2.5, d: 0.7, dur: 2.5 },
+  { x: 18, y: 14, c: '#F5A623', s: 2, d: 1.1, dur: 2.0 },
+  { x: -22, y: 2, c: '#FFFFFF', s: 2, d: 0.55, dur: 1.6 },
+  { x: 22, y: -2, c: '#F97316', s: 2.5, d: 1.4, dur: 2.3 },
+  { x: 0, y: -20, c: '#F5A623', s: 3, d: 0.2, dur: 2.1 },
+  { x: -6, y: 20, c: '#FFF8E7', s: 2, d: 0.9, dur: 1.9 },
+  { x: 10, y: 18, c: '#0EA5A0', s: 2, d: 1.6, dur: 2.4 },
+  { x: -10, y: -18, c: '#FFFFFF', s: 2.5, d: 1.25, dur: 2.0 },
+] as const;
+
+export default function PeculiarLogo({ size = 40 }: PeculiarLogoProps) {
+  const srcSet =
+    size > 32
+      ? '/images/soccer-ball@2x.png 2x, /images/soccer-ball.png 1x'
+      : '/images/soccer-ball.png 1x, /images/soccer-ball@2x.png 2x';
+
+  const wrap = Math.round(size * 1.35);
+
   return (
-    <div className="relative shrink-0" style={{ width: size, height: size }} aria-hidden>
-      <motion.div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(245,166,35,0.25) 0%, transparent 70%)',
-        }}
-        animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.8, 0.4] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="relative"
+    <div
+      className="logo-ball-wrap"
+      style={{ width: wrap, height: wrap }}
+      aria-hidden
+    >
+      <div className="logo-ball-glow" style={{ width: size, height: size }} />
+      {PIXIE_DUST.map((p, i) => (
+        <span
+          key={i}
+          className="logo-pixie"
+          style={
+            {
+              '--px': `${p.x}px`,
+              '--py': `${p.y}px`,
+              '--pc': p.c,
+              '--ps': `${p.s}px`,
+              '--pd': `${p.d}s`,
+              '--pdu': `${p.dur}s`,
+            } as CSSProperties
+          }
+        />
+      ))}
+      <img
+        src="/images/soccer-ball.png"
+        srcSet={srcSet}
+        alt=""
+        className="logo-ball-img"
         style={{ width: size, height: size }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
-      >
-        <svg viewBox="0 0 32 32" width={size} height={size}>
-          <circle cx="16" cy="18" r="11" fill="none" stroke="url(#peculiarGrad)" strokeWidth="1" opacity="0.5" />
-          {EDGES.map(([a, b], i) => (
-            <line
-              key={i}
-              x1={NODES[a].x}
-              y1={NODES[a].y}
-              x2={NODES[b].x}
-              y2={NODES[b].y}
-              stroke="url(#peculiarGrad)"
-              strokeWidth="1.2"
-              opacity="0.9"
-            />
-          ))}
-          {NODES.map((n, i) => (
-            <motion.circle
-              key={i}
-              cx={n.x}
-              cy={n.y}
-              r="2.2"
-              fill={n.color}
-              animate={{ scale: [1, 1.4, 1] }}
-              transition={{ duration: 2, delay: i * 0.2, repeat: Infinity, ease: 'easeInOut' }}
-            />
-          ))}
-          <defs>
-            <linearGradient id="peculiarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0EA5A0" />
-              <stop offset="50%" stopColor="#F5A623" />
-              <stop offset="100%" stopColor="#F97316" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </motion.div>
+        width={size}
+        height={size}
+        decoding="async"
+        fetchPriority="high"
+      />
     </div>
   );
 }

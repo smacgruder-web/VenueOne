@@ -1,25 +1,22 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import FoodImage from './FoodImage';
+import { HERO_IMAGE_URLS } from '../data/constants';
 
 const SLIDES = [
   {
-    image: '/images/hero-game-night.jpg',
+    image: HERO_IMAGE_URLS[0],
     tagline: 'Game night cravings',
     sub: 'Hot food. Cold drinks. Delivered to your seat.',
-    mood: 'food' as const,
   },
   {
-    image: '/images/menu/nachos.jpg',
+    image: HERO_IMAGE_URLS[1],
     tagline: 'Stack it high',
     sub: 'Nachos, burgers, tenders — straight from the kitchen.',
-    mood: 'food' as const,
   },
   {
-    image: '/images/menu/craft-beer.jpg',
+    image: HERO_IMAGE_URLS[2],
     tagline: 'Ice-cold refreshment',
     sub: 'Craft beer, seltzers & sodas — frosted and ready.',
-    mood: 'drink' as const,
   },
 ];
 
@@ -33,32 +30,33 @@ export default function FoodHero() {
   }, []);
 
   return (
-    <div className="relative mx-4 mt-3 overflow-hidden rounded-2xl" style={{ height: 200 }}>
-      <AnimatePresence mode="wait">
+    <div className="relative mx-4 mt-3 overflow-hidden rounded-2xl" style={{ height: 240 }}>
+      {SLIDES.map((s, i) => (
         <motion.div
-          key={slide.image}
+          key={s.image}
           className="absolute inset-0"
-          initial={{ opacity: 0, scale: 1.08 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.04 }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
+          initial={false}
+          animate={{ opacity: i === index ? 1 : 0, scale: i === index ? 1 : 1.04 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+          aria-hidden={i !== index}
         >
-          <FoodImage src={slide.image} alt="" className="h-full w-full object-cover" />
+          <img
+            src={s.image}
+            alt=""
+            className="h-full w-full object-cover"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+          />
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(180deg, rgba(6,12,24,0.1) 0%, rgba(6,12,24,0.5) 50%, rgba(6,12,24,0.92) 100%)',
+                'linear-gradient(180deg, transparent 0%, rgba(6,12,24,0.25) 55%, rgba(6,12,24,0.88) 100%)',
             }}
           />
-          {slide.mood === 'food' && (
-            <div className="food-steam absolute bottom-16 left-1/4 opacity-40" aria-hidden />
-          )}
-          {slide.mood === 'drink' && (
-            <div className="drink-frost absolute inset-0 opacity-30" aria-hidden />
-          )}
         </motion.div>
-      </AnimatePresence>
+      ))}
 
       <div className="absolute inset-x-0 bottom-0 z-10 p-5">
         <motion.p

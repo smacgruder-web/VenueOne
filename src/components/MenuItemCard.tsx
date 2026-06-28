@@ -13,13 +13,11 @@ interface MenuItemCardProps {
 }
 
 export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: MenuItemCardProps) {
-  const isDrink = item.cat === 'Drinks';
   const inCart = qty > 0;
 
   return (
     <motion.article
-      className={`menu-food-card relative isolate overflow-hidden rounded-2xl border border-[#1E2A3A] ${inCart ? 'glow-accent ring-2 ring-[#F5A623]' : ''}`}
-      style={{ minHeight: 148 }}
+      className={`menu-food-card relative isolate aspect-[3/2] min-h-[200px] overflow-hidden rounded-2xl border-2 border-[#F5A623] ${inCart ? 'glow-accent ring-2 ring-[#F5A623] ring-offset-2 ring-offset-[#0A0F1E]' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.35 }}
@@ -31,21 +29,17 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
         src={item.image}
         alt={item.name}
         emoji={item.emoji}
-        priority={index < 4}
+        priority
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
       <div
-        className="absolute inset-0"
+        className="pointer-events-none absolute inset-0"
         style={{
-          background: isDrink
-            ? 'linear-gradient(135deg, rgba(6,12,24,0.2) 0%, rgba(14,165,160,0.25) 40%, rgba(6,12,24,0.88) 100%)'
-            : 'linear-gradient(135deg, rgba(6,12,24,0.1) 0%, rgba(245,166,35,0.15) 30%, rgba(6,12,24,0.9) 100%)',
+          background:
+            'linear-gradient(180deg, transparent 0%, transparent 42%, rgba(6,12,24,0.35) 68%, rgba(6,12,24,0.82) 100%)',
         }}
       />
-
-      {!isDrink && <div className="food-steam absolute top-2 right-4 opacity-25" aria-hidden />}
-      {isDrink && <div className="drink-frost absolute inset-0 opacity-20" aria-hidden />}
 
       {item.popular && (
         <span className="absolute top-3 left-3 z-10 rounded-md border border-[#F5A623] bg-[#0A0F1Ecc] px-2 py-0.5 text-[9px] font-bold tracking-widest text-[#F5A623] backdrop-blur-sm">
@@ -53,7 +47,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
         </span>
       )}
 
-      <div className="relative z-10 flex h-full min-h-[148px] flex-col justify-end p-4">
+      <div className="relative z-10 flex h-full flex-col justify-end p-3.5">
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0 flex-1">
             <h3 className="text-base font-extrabold text-white drop-shadow-md">{item.name}</h3>

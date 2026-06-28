@@ -25,10 +25,10 @@ export default function FoodImage({ src, alt, className = '', fallback, emoji, p
       src={failed && fallback ? fallback : src}
       alt={alt}
       className={className}
-      loading={priority ? 'eager' : 'lazy'}
+      loading="eager"
       decoding="async"
-      fetchPriority={priority ? 'high' : 'auto'}
-      sizes="(max-width: 640px) 50vw, 320px"
+      fetchPriority={priority ? 'high' : 'low'}
+      sizes="(max-width: 640px) 50vw, 400px"
       onError={() => setFailed(true)}
     />
   );

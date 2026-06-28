@@ -17,6 +17,78 @@ body {
   min-height: 100vh;
 }
 
+.logo-ball-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-ball-img {
+  position: relative;
+  z-index: 2;
+  display: block;
+  object-fit: contain;
+}
+
+.logo-ball-glow {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 166, 35, 0.28) 0%, transparent 72%);
+  animation: logo-glow-pulse 3s ease-in-out infinite;
+}
+
+.logo-pixie {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  width: var(--ps, 3px);
+  height: var(--ps, 3px);
+  margin-left: calc(var(--ps, 3px) / -2);
+  margin-top: calc(var(--ps, 3px) / -2);
+  border-radius: 50%;
+  background: var(--pc, #f5a623);
+  box-shadow:
+    0 0 4px var(--pc, #f5a623),
+    0 0 8px rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  animation: pixie-sparkle var(--pdu, 2s) ease-in-out infinite;
+  animation-delay: var(--pd, 0s);
+}
+
+@keyframes logo-glow-pulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes pixie-sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(calc(var(--px, 0px) * 0.6), calc(var(--py, 0px) * 0.6)) scale(0.15);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(var(--px, 0px), var(--py, 0px)) scale(1.15);
+  }
+  42% {
+    opacity: 0.85;
+    transform: translate(calc(var(--px, 0px) * 1.12), calc(var(--py, 0px) * 1.12)) scale(0.85);
+  }
+  68% {
+    opacity: 0.35;
+    transform: translate(calc(var(--px, 0px) * 1.35), calc(var(--py, 0px) * 1.35)) scale(0.45);
+  }
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
@@ -129,6 +201,8 @@ body {
 .menu-food-card img {
   object-fit: cover;
   object-position: center;
+  filter: saturate(1.12) contrast(1.06);
+  transform: translateZ(0);
 }
 
 .menu-food-card:hover {

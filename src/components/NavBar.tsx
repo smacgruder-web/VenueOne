@@ -26,7 +26,7 @@ export default function NavBar({ view, items, onChange }: NavBarProps) {
       }}
     >
       <div className="mr-2 flex items-center gap-2.5 border-r border-[#1E2A3A] pr-4">
-        <PeculiarLogo size={32} />
+        <PeculiarLogo size={40} />
         <div className="flex items-baseline">
           <span className="text-sm font-extrabold tracking-[0.05em] text-[#F8F9FC]">VENUE</span>
           <span className="text-sm font-extrabold tracking-[0.05em] text-[#F5A623]">ONE</span>

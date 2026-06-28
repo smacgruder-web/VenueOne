@@ -251,17 +251,34 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
               Order #{confirmedOrder.id} · {fmtMoney(confirmedOrder.total)}
               {confirmedOrder.tip > 0 ? ` + ${fmtMoney(confirmedOrder.tip)} tip` : ''}
             </div>
-            {canOrderAgain && (
+            <div className="mt-6 flex w-full max-w-[280px] flex-col gap-3">
+              {canOrderAgain && (
+                <motion.button
+                  style={S.payBtn}
+                  onClick={() => setActiveOrderId(null)}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="glow-accent"
+                >
+                  Order Again
+                </motion.button>
+              )}
               <motion.button
-                style={{ ...S.payBtn, marginTop: 24, maxWidth: 280 }}
+                type="button"
+                style={{
+                  ...S.historyBtn,
+                  width: '100%',
+                  padding: '12px 16px',
+                  fontSize: 13,
+                  borderRadius: 10,
+                }}
                 onClick={() => setActiveOrderId(null)}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="glow-accent"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Order Again
+                ← Back to Menu
               </motion.button>
-            )}
+            </div>
           </motion.div>
         </>
       ) : (
