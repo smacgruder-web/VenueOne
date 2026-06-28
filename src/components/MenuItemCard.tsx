@@ -17,11 +17,10 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
 
   return (
     <motion.article
-      className={`menu-food-card relative isolate aspect-[3/2] min-h-[168px] overflow-hidden rounded-2xl border-2 border-[#F5A623] sm:min-h-[200px] ${inCart ? 'glow-accent ring-2 ring-[#F5A623] ring-offset-2 ring-offset-[#0A0F1E]' : ''}`}
+      className={`menu-food-card relative isolate aspect-[3/2] min-h-[152px] overflow-hidden rounded-2xl border-2 border-[#F5A623] sm:min-h-[200px] ${inCart ? 'menu-food-card--active glow-accent' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.35 }}
-      whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
       onClick={() => qty === 0 && onAdd()}
     >
@@ -37,57 +36,62 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, transparent 0%, transparent 42%, rgba(6,12,24,0.35) 68%, rgba(6,12,24,0.82) 100%)',
+            'linear-gradient(180deg, transparent 0%, transparent 38%, rgba(6,12,24,0.4) 62%, rgba(6,12,24,0.88) 100%)',
         }}
       />
 
       {item.popular && (
-        <span className="absolute top-3 left-3 z-10 rounded-md border border-[#F5A623] bg-[#0A0F1Ecc] px-2 py-0.5 text-[9px] font-bold tracking-widest text-[#F5A623] backdrop-blur-sm">
+        <span className="absolute top-2 left-2 z-10 rounded-md border border-[#F5A623] bg-[#0A0F1Ecc] px-1.5 py-0.5 text-[8px] font-bold tracking-wider text-[#F5A623] backdrop-blur-sm sm:top-3 sm:left-3 sm:px-2 sm:text-[9px] sm:tracking-widest">
           🔥 POPULAR
         </span>
       )}
 
-      <div className="relative z-10 flex h-full flex-col justify-end p-3.5">
-        <div className="flex items-end justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <h3 className="text-base font-extrabold text-white drop-shadow-md">{item.name}</h3>
-            <p className="mt-0.5 line-clamp-1 text-xs text-[#C9D2E0]">{item.desc}</p>
-            <p className="mt-1.5 text-lg font-black text-[#F5A623] drop-shadow">{fmtMoney(item.price)}</p>
-          </div>
+      <div className="relative z-10 flex h-full flex-col justify-end p-2.5 pb-[3.25rem] sm:p-3.5 sm:pb-14">
+        <div className="min-w-0">
+          <h3 className="line-clamp-2 text-sm font-extrabold leading-tight text-white drop-shadow-md sm:text-base">{item.name}</h3>
+          <p className="mt-0.5 line-clamp-1 text-[10px] text-[#C9D2E0] sm:text-xs">{item.desc}</p>
+          <p className="mt-1 text-base font-black text-[#F5A623] drop-shadow sm:mt-1.5 sm:text-lg">{fmtMoney(item.price)}</p>
+        </div>
+      </div>
 
-          {qty > 0 ? (
-            <div
-              className="flex shrink-0 items-center gap-2 rounded-full border border-[#F5A62355] bg-[#0A0F1Ecc] px-2 py-1 backdrop-blur-md"
-              onClick={(e) => e.stopPropagation()}
+      <div
+        className="absolute bottom-2.5 right-2.5 z-20 sm:bottom-3.5 sm:right-3.5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {qty > 0 ? (
+          <div className="flex items-center gap-1 rounded-full border border-[#F5A62355] bg-[#0A0F1Eee] px-1 py-0.5 backdrop-blur-md sm:gap-2 sm:px-2 sm:py-1">
+            <motion.button
+              type="button"
+              className="menu-qty-btn flex h-9 w-9 items-center justify-center rounded-full bg-[#1A2335] text-base font-bold text-white sm:h-11 sm:w-11 sm:text-lg"
+              onClick={onDec}
+              whileTap={{ scale: 0.9 }}
+              aria-label={`Remove one ${item.name}`}
             >
-              <motion.button
-                type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1A2335] text-lg font-bold text-white"
-                onClick={onDec}
-                whileTap={{ scale: 0.9 }}
-              >
-                −
-              </motion.button>
-              <span className="min-w-[20px] text-center text-sm font-bold">{qty}</span>
-              <motion.button
-                type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-[#F5A623] text-lg font-bold text-[#0A0F1E]"
-                onClick={onInc}
-                whileTap={{ scale: 0.9 }}
-              >
-                +
-              </motion.button>
-            </div>
-          ) : (
-            <motion.div
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#F5A623] text-xl font-bold text-[#0A0F1E] shadow-lg"
-              style={{ boxShadow: '0 4px 16px rgba(245,166,35,0.45)' }}
-              whileHover={{ scale: 1.1 }}
+              −
+            </motion.button>
+            <span className="min-w-[18px] text-center text-xs font-bold sm:min-w-[20px] sm:text-sm">{qty}</span>
+            <motion.button
+              type="button"
+              className="menu-qty-btn flex h-9 w-9 items-center justify-center rounded-full bg-[#F5A623] text-base font-bold text-[#0A0F1E] sm:h-11 sm:w-11 sm:text-lg"
+              onClick={onInc}
+              whileTap={{ scale: 0.9 }}
+              aria-label={`Add one ${item.name}`}
             >
               +
-            </motion.div>
-          )}
-        </div>
+            </motion.button>
+          </div>
+        ) : (
+          <motion.button
+            type="button"
+            className="menu-add-btn flex h-10 w-10 items-center justify-center rounded-full bg-[#F5A623] text-lg font-bold text-[#0A0F1E] shadow-lg sm:h-11 sm:w-11 sm:text-xl"
+            style={{ boxShadow: '0 4px 16px rgba(245,166,35,0.45)' }}
+            onClick={onAdd}
+            whileTap={{ scale: 0.9 }}
+            aria-label={`Add ${item.name} to cart`}
+          >
+            +
+          </motion.button>
+        )}
       </div>
     </motion.article>
   );

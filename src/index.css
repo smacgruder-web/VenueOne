@@ -89,6 +89,11 @@ body {
   padding: 0.75rem 1rem;
 }
 
+.menu-grid > * {
+  min-width: 0;
+  width: 100%;
+}
+
 @media (min-width: 640px) {
   .menu-grid {
     gap: 1rem;
@@ -296,6 +301,15 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   transition: box-shadow 0.3s ease;
   isolation: isolate;
+  contain: layout paint;
+  touch-action: manipulation;
+}
+
+.menu-food-card--active {
+  box-shadow:
+    0 0 0 2px #f5a623,
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba(245, 166, 35, 0.25);
 }
 
 .menu-food-card img {
@@ -305,8 +319,21 @@ body {
   transform: translateZ(0);
 }
 
-.menu-food-card:hover {
-  animation: warm-pulse 2s ease-in-out infinite;
+.menu-add-btn,
+.menu-qty-btn {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .menu-food-card:hover {
+    animation: warm-pulse 2s ease-in-out infinite;
+  }
+
+  .menu-add-btn:hover {
+    transform: scale(1.08);
+  }
 }
 
 .cat-pill-food.cat-active {
