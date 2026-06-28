@@ -2,24 +2,27 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import FoodImage from './FoodImage';
 
-const img = (id: string) =>
+const unsplash = (id: string) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&h=500&q=90`;
+
+const pexels = (id: number) =>
+  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=900&h=500&fit=crop`;
 
 const SLIDES = [
   {
-    image: img('photo-1555939594-58d7cb561ad1'),
+    image: unsplash('photo-1555939594-58d7cb561ad1'),
     tagline: 'Game night cravings',
     sub: 'Hot food. Cold drinks. Delivered to your seat.',
     mood: 'food' as const,
   },
   {
-    image: img('photo-1513456852971-30c0ba1c4844'),
+    image: pexels(4197096),
     tagline: 'Stack it high',
     sub: 'Nachos, burgers, tenders — straight from the kitchen.',
     mood: 'food' as const,
   },
   {
-    image: img('photo-1535958636474-b021ee887b13'),
+    image: unsplash('photo-1535958636474-b021ee887b13'),
     tagline: 'Ice-cold refreshment',
     sub: 'Craft beer, seltzers & sodas — frosted and ready.',
     mood: 'drink' as const,
