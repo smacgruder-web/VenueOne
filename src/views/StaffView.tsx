@@ -100,7 +100,7 @@ export default function StaffView({ orders, updateStatus }: StaffViewProps) {
           <div style={{ fontSize: 13, marginTop: 4 }}>New orders will appear here</div>
         </div>
       ) : (
-        <div style={S.orderGrid}>
+        <div className="staff-order-grid">
           {active.map((order, index) => {
             const action = nextAction(order);
             const isDelivery = order.fulfillment === 'delivery';

@@ -17,7 +17,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
 
   return (
     <motion.article
-      className={`menu-food-card relative isolate aspect-[3/2] min-h-[200px] overflow-hidden rounded-2xl border-2 border-[#F5A623] ${inCart ? 'glow-accent ring-2 ring-[#F5A623] ring-offset-2 ring-offset-[#0A0F1E]' : ''}`}
+      className={`menu-food-card relative isolate aspect-[3/2] min-h-[168px] overflow-hidden rounded-2xl border-2 border-[#F5A623] sm:min-h-[200px] ${inCart ? 'glow-accent ring-2 ring-[#F5A623] ring-offset-2 ring-offset-[#0A0F1E]' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.35 }}
@@ -62,7 +62,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
             >
               <motion.button
                 type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A2335] text-lg font-bold text-white"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1A2335] text-lg font-bold text-white"
                 onClick={onDec}
                 whileTap={{ scale: 0.9 }}
               >
@@ -71,7 +71,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
               <span className="min-w-[20px] text-center text-sm font-bold">{qty}</span>
               <motion.button
                 type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F5A623] text-lg font-bold text-[#0A0F1E]"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-[#F5A623] text-lg font-bold text-[#0A0F1E]"
                 onClick={onInc}
                 whileTap={{ scale: 0.9 }}
               >
@@ -80,7 +80,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
             </div>
           ) : (
             <motion.div
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F5A623] text-xl font-bold text-[#0A0F1E] shadow-lg"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#F5A623] text-xl font-bold text-[#0A0F1E] shadow-lg"
               style={{ boxShadow: '0 4px 16px rgba(245,166,35,0.45)' }}
               whileHover={{ scale: 1.1 }}
             >

@@ -62,7 +62,7 @@ export default function RunnerView({ orders, claimOrder, updateStatus, runnerIde
         {pool.length === 0 ? (
           <div style={{ fontSize: 13, color: '#3A4557' }}>No unclaimed deliveries right now</div>
         ) : (
-          <div style={S.orderGrid}>
+          <div className="staff-order-grid">
             {pool.map((order) => (
               <div key={order.id} style={S.orderCard('ready')}>
                 <div style={S.orderCardHead}>
@@ -101,7 +101,7 @@ export default function RunnerView({ orders, claimOrder, updateStatus, runnerIde
         {mine.length === 0 ? (
           <div style={{ fontSize: 13, color: '#3A4557' }}>Claim a delivery above to get started</div>
         ) : (
-          <div style={S.orderGrid}>
+          <div className="staff-order-grid">
             {mine.map((order) => (
               <div key={order.id} style={S.orderCard('preparing')}>
                 <div style={S.orderCardHead}>

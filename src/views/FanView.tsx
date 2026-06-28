@@ -352,7 +352,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-2 gap-3 px-4 py-3">
+          <div className="menu-grid">
             {filtered.map((item, index) => {
               const qty = cart[item.id] || 0;
               return (
@@ -368,8 +368,8 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
               );
             })}
           </div>
-          <div style={{ height: 80 }} />
-          <div style={S.cartBar}>
+          <div className="h-28 md:h-4" aria-hidden />
+          <div style={S.cartBar} className="cart-bar-safe">
             <motion.button
               style={S.cartBtn(cartCount > 0)}
               onClick={() => cartCount > 0 && setShowCheckout(true)}

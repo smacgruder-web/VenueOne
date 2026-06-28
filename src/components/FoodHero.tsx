@@ -30,7 +30,7 @@ export default function FoodHero() {
   }, []);
 
   return (
-    <div className="relative mx-4 mt-3 overflow-hidden rounded-2xl" style={{ height: 240 }}>
+    <div className="relative mx-3 mt-2 h-[200px] overflow-hidden rounded-2xl sm:mx-4 sm:mt-3 sm:h-[220px] md:h-[240px]">
       {SLIDES.map((s, i) => (
         <motion.div
           key={s.image}

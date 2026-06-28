@@ -152,7 +152,7 @@ export const S = {
   feedText: { fontSize: 12, color: '#F8F9FC' } as CSSProperties,
   feedSub: { fontSize: 11, color: '#8B95A8', marginTop: 1 } as CSSProperties,
   feedAmt: { fontSize: 13, fontWeight: 700, color: '#F5A623' } as CSSProperties,
-  toast: { position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', background: '#111827', border: '1px solid #F5A623', color: '#F8F9FC', fontSize: 13, fontWeight: 700, padding: '10px 18px', borderRadius: 24, zIndex: 200, boxShadow: '0 8px 24px rgba(0,0,0,0.4)', animation: 'toastIn 0.25s ease' } as CSSProperties,
+  toast: { position: 'fixed', top: 'max(1rem, env(safe-area-inset-top))', left: '50%', transform: 'translateX(-50%)', background: '#111827', border: '1px solid #F5A623', color: '#F8F9FC', fontSize: 13, fontWeight: 700, padding: '10px 18px', borderRadius: 24, zIndex: 200, boxShadow: '0 8px 24px rgba(0,0,0,0.4)', animation: 'toastIn 0.25s ease', maxWidth: 'calc(100vw - 2rem)' } as CSSProperties,
   recapCard: { background: '#0D1929', border: '1px solid #1E2A3A', borderRadius: 12, padding: '16px 18px', lineHeight: 1.6, fontSize: 13, color: '#C9D2E0' } as CSSProperties,
   copyBtn: { background: 'transparent', border: '1px solid #2A3547', color: '#8B95A8', fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 16, cursor: 'pointer', marginTop: 10 } as CSSProperties,
 };

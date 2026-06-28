@@ -31,26 +31,27 @@ export default function App() {
   }, []);
 
   const navItems = [
-    { id: 'fan' as ViewId, label: '📱 Fan Order' },
-    { id: 'staff' as ViewId, label: '🎛 Staff', badge: newOrders },
-    { id: 'runners' as ViewId, label: '🛵 Runners', badge: unclaimedCount },
-    { id: 'analytics' as ViewId, label: '📊 GM Analytics' },
+    { id: 'fan' as ViewId, label: '📱 Fan Order', icon: '📱', mobileLabel: 'Fan' },
+    { id: 'staff' as ViewId, label: '🎛 Staff', icon: '🎛', mobileLabel: 'Staff', badge: newOrders },
+    { id: 'runners' as ViewId, label: '🛵 Runners', icon: '🛵', mobileLabel: 'Run', badge: unclaimedCount },
+    { id: 'analytics' as ViewId, label: '📊 GM Analytics', icon: '📊', mobileLabel: 'Stats' },
   ];
 
   return (
-    <div className="relative min-h-screen font-sans text-white">
+    <div className="app-shell relative min-h-[100dvh] font-sans text-white">
       <AmbientBackground />
       <NavBar view={view} items={navItems} onChange={setView} />
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={view}
-          variants={viewVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-        >
+      <main className="app-main">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={view}
+            variants={viewVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+          >
           {view === 'fan' && <FanView onOrder={addOrder} orders={orders} fanIdentity={fanIdentity} />}
           {view === 'staff' && <StaffView orders={orders} updateStatus={updateStatus} />}
           {view === 'runners' && (
@@ -64,8 +65,9 @@ export default function App() {
           {view === 'analytics' && (
             <AnalyticsView orders={orders} stats={eventStats} onReset={resetData} />
           )}
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </main>
     </div>
   );
 }

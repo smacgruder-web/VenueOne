@@ -6,15 +6,115 @@
   --color-dark-2: #060C18;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #060C18;
   color: #F8F9FC;
-  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Mobile-first app shell */
+.app-shell {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.app-main {
+  width: 100%;
+  padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .app-shell {
+    max-width: 48rem;
+    box-shadow: 0 0 0 1px rgba(30, 42, 58, 0.6);
+  }
+
+  .app-main {
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-shell {
+    max-width: 56rem;
+  }
+}
+
+.app-nav-tab {
+  touch-action: manipulation;
+}
+
+.app-bottom-nav {
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35);
+}
+
+.cart-bar-safe {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  z-index: 45;
+  padding: 0.75rem 1rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  background: linear-gradient(180deg, transparent 0%, rgba(10, 15, 30, 0.92) 24%, #0a0f1e 100%);
+}
+
+@media (min-width: 768px) {
+  .cart-bar-safe {
+    position: sticky;
+    bottom: 0;
+    background: #0a0f1e;
+    padding-bottom: 0.75rem;
+  }
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .menu-grid {
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 1rem 1.5rem;
+  }
+}
+
+.staff-order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .staff-order-grid {
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
 }
 
 .logo-ball-wrap {
