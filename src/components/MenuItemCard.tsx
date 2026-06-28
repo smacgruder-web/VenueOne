@@ -118,34 +118,36 @@ export default function MenuItemCard({
 
   return (
     <motion.article
-      className={`menu-food-card menu-card-flip relative isolate aspect-[3/2] min-h-[152px] rounded-2xl border-2 border-[#F5A623] sm:min-h-[200px] ${inCart ? 'menu-food-card--active glow-accent' : ''} ${flipped ? 'menu-food-card--flipped' : ''}`}
+      className={`menu-food-card menu-card-flip ${inCart ? 'menu-food-card--active glow-accent' : ''} ${flipped ? 'menu-food-card--flipped' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.35 }}
     >
-      <div className={`menu-card-flip-inner h-full w-full ${flipped ? 'is-flipped' : ''}`}>
-        <div className="menu-card-face menu-card-front h-full w-full overflow-hidden rounded-[0.875rem]">
-          <FoodImage
-            src={item.image}
-            alt={item.name}
-            emoji={item.emoji}
-            priority
-            className="absolute inset-0 z-[1] h-full w-full object-cover object-center"
-          />
-          <button
-            type="button"
-            className="menu-photo-flip-btn absolute inset-x-0 top-0 z-[2] bottom-[3.5rem] sm:bottom-[3.75rem]"
-            onClick={() => setFlipped(true)}
-            aria-label={`Customize ${item.name}`}
-          />
+      <FoodImage
+        src={item.image}
+        alt={item.name}
+        emoji={item.emoji}
+        priority
+        className={`menu-card-photo ${flipped ? 'menu-card-photo--hidden' : ''}`}
+      />
 
-          <div className="menu-card-scrim pointer-events-none absolute inset-0 z-[3]" />
-          <span className="menu-flip-hint pointer-events-none absolute right-2 top-2 z-[4] rounded-full border border-[#F5A62355] bg-[#0A0F1Ebb] px-2 py-0.5 text-[9px] font-bold tracking-wide text-[#F5A623] backdrop-blur-sm">
+      <button
+        type="button"
+        className="menu-photo-flip-btn"
+        onClick={() => setFlipped(true)}
+        aria-label={`Customize ${item.name}`}
+      />
+
+      <div className={`menu-card-flip-inner ${flipped ? 'is-flipped' : ''}`}>
+        <div className="menu-card-face menu-card-front">
+          <div className="menu-card-scrim" />
+
+          <span className="menu-flip-hint">
             Tap photo
           </span>
 
           {item.popular && (
-            <span className="pointer-events-none absolute top-2 left-2 z-[4] rounded-md border border-[#F5A623] bg-[#0A0F1Ecc] px-1.5 py-0.5 text-[8px] font-bold tracking-wider text-[#F5A623] backdrop-blur-sm sm:top-3 sm:left-3 sm:px-2 sm:text-[9px] sm:tracking-widest">
+            <span className="menu-card-popular">
               🔥 POPULAR
             </span>
           )}
@@ -161,7 +163,7 @@ export default function MenuItemCard({
           />
         </div>
 
-        <div className="menu-card-face menu-card-back h-full w-full overflow-hidden rounded-[0.875rem] bg-[#0A0F1E]">
+        <div className="menu-card-face menu-card-back">
           <button
             type="button"
             className="menu-card-back-header flex w-full items-center justify-between border-b border-[#F5A62333] bg-[#060C18] px-2.5 py-2 text-left sm:px-3"
