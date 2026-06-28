@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import type { MenuItem } from '../types/venue';
 import { fmtMoney } from '../utils/format';
 
@@ -12,6 +13,7 @@ interface MenuItemCardProps {
 }
 
 export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: MenuItemCardProps) {
+  const [imgError, setImgError] = useState(false);
   const isDrink = item.cat === 'Drinks';
   const inCart = qty > 0;
 
@@ -26,13 +28,20 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
       whileTap={{ scale: 0.98 }}
       onClick={() => qty === 0 && onAdd()}
     >
-      <img
-        src={item.image}
-        alt={item.name}
-        className="absolute inset-0 h-full w-full object-cover"
-        loading="lazy"
-        decoding="async"
-      />
+      {imgError ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#111827] text-5xl">
+          {item.emoji}
+        </div>
+      ) : (
+        <img
+          src={item.image}
+          alt={item.name}
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+          onError={() => setImgError(true)}
+        />
+      )}
 
       <div
         className="absolute inset-0"
