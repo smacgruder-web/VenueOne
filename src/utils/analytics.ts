@@ -1,5 +1,5 @@
 import type { Order } from '../types/venue';
-import { fmtMoney } from './format';
+import { fmtDateTime, fmtMoney, fmtTime } from './format';
 
 export function getDuration(
   history: Order['statusHistory'] | undefined,
@@ -32,7 +32,7 @@ export function bucketize(
 export function bucketLabel(idx: number, bucketCount: number, bucketSizeMs: number): string {
   const bucketsAgo = bucketCount - 1 - idx;
   const t = Date.now() - bucketsAgo * bucketSizeMs;
-  return new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return fmtTime(t);
 }
 
 export function exportOrdersCSV(orders: Order[]): void {
@@ -48,7 +48,7 @@ export function exportOrdersCSV(orders: Order[]): void {
         o.total.toFixed(2),
         (o.tip || 0).toFixed(2),
         o.status,
-        new Date(o.ts).toLocaleString(),
+        fmtDateTime(o.ts),
       ]
         .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(','),
@@ -92,7 +92,7 @@ function esc(v: string | number): string {
 
 export function buildRecapHTML(data: RecapData): string {
   const { recapText, kpis, topItems, topSections, runnerRows } = data;
-  const generatedAt = new Date().toLocaleString([], { dateStyle: 'long', timeStyle: 'short' });
+  const generatedAt = fmtDateTime(Date.now());
 
   const kpiCards = kpis
     .map(

@@ -138,6 +138,8 @@ export const MENU: MenuItem[] = [
   },
 ];
 
+export const VENUE_TIMEZONE = 'America/New_York';
+
 export const SECTIONS = ['101', '102', '103', '104', '105', '106', '107', '108'];
 export const WINDOWS = ['A', 'B', 'C'];
 export const RUNNERS = ['Marcus', 'Devon', 'Aaliyah', 'Trey', 'Nia'];
