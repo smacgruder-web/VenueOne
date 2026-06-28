@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import FoodHero from '../components/FoodHero';
 import FoodImage from '../components/FoodImage';
 import MenuItemCard from '../components/MenuItemCard';
+import MenuItemDetailPage from '../components/MenuItemDetailPage';
 import MotionSheet from '../components/MotionSheet';
 import OrderFoodStrip from '../components/OrderFoodStrip';
 import { MENU, SECTIONS, DELIVERY_FEE } from '../data/constants';
@@ -15,6 +16,7 @@ import {
   formatModsSummary,
   formatOrderLine,
 } from '../utils/cartMods';
+import { getRelatedMenuItems } from '../utils/menuRelated';
 import { fmtMoney, fmtTime } from '../utils/format';
 import { playChime } from '../utils/order';
 
@@ -45,6 +47,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
   const [tipPct, setTipPct] = useState(0.18);
   const [showCheckout, setShowCheckout] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [detailItemId, setDetailItemId] = useState<number | null>(null);
 
   const { activeOrderId, setActiveOrderId, myOrderIds, trackOrder } = fanIdentity;
   const confirmedOrder = orders.find((o) => o.id === activeOrderId) || null;
@@ -72,6 +75,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
   const tipAmount = fulfillment === 'delivery' ? Math.round(itemsTotal * tipPct * 100) / 100 : 0;
   const grandTotal = cartTotal + tipAmount;
   const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
+  const detailItem = detailItemId ? MENU.find((m) => m.id === detailItemId) ?? null : null;
   const isDelivery = confirmedOrder?.fulfillment === 'delivery';
   const claimed = !!confirmedOrder?.runner;
 
@@ -393,8 +397,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                   item={item}
                   qty={qty}
                   index={index}
-                  mods={getMods(item.id)}
-                  onModsChange={(mods) => setMods(item.id, mods)}
+                  onOpenDetail={() => setDetailItemId(item.id)}
                   onAdd={() => setQty(item.id, 1)}
                   onInc={() => setQty(item.id, 1)}
                   onDec={() => setQty(item.id, -1)}
@@ -402,6 +405,22 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
               );
             })}
           </div>
+          {detailItem && (
+            <MenuItemDetailPage
+              item={detailItem}
+              relatedItems={getRelatedMenuItems(detailItem, MENU)}
+              mods={getMods(detailItem.id)}
+              qty={getQty(detailItem.id)}
+              open={detailItemId === detailItem.id}
+              onClose={() => setDetailItemId(null)}
+              onModsChange={(mods) => setMods(detailItem.id, mods)}
+              onSelectItem={(next) => setDetailItemId(next.id)}
+              onAdd={() => setQty(detailItem.id, 1)}
+              onInc={() => setQty(detailItem.id, 1)}
+              onDec={() => setQty(detailItem.id, -1)}
+            />
+          )}
+
           <div className="h-28 md:h-4" aria-hidden />
           <div style={S.cartBar} className="cart-bar-safe">
             <motion.button
