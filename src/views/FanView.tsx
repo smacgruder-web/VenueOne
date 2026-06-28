@@ -1,8 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import FoodHero from '../components/FoodHero';
+import FoodImage from '../components/FoodImage';
 import MenuItemCard from '../components/MenuItemCard';
 import MotionSheet from '../components/MotionSheet';
+import OrderFoodStrip from '../components/OrderFoodStrip';
 import { MENU, SECTIONS, DELIVERY_FEE } from '../data/constants';
 import { S } from '../styles/venueStyles';
 import type { CartItem, FanIdentity, Fulfillment, Order } from '../types/venue';
@@ -177,8 +179,9 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
           >
+            <OrderFoodStrip items={confirmedOrder.items} size="lg" />
             <motion.div
-              style={S.bigEmoji}
+              style={{ ...S.bigEmoji, fontSize: 40, marginBottom: 8 }}
               key={statusIcon}
               initial={{ scale: 0, rotate: -20 }}
               animate={{ scale: 1, rotate: 0 }}
@@ -369,9 +372,10 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                 {cartItems.map((i) => (
                   <div key={i.id} style={{ ...S.lineItem, alignItems: 'center', gap: 10 }}>
                     <div className="flex items-center gap-2.5">
-                      <img
+                      <FoodImage
                         src={i.image}
-                        alt=""
+                        alt={i.name}
+                        emoji={i.emoji}
                         className="h-10 w-10 rounded-lg object-cover ring-1 ring-[#F5A62344]"
                       />
                       <span>
@@ -451,6 +455,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
             {history.length === 0 && <div style={S.historyEmpty}>No orders yet tonight.</div>}
             {history.map((h) => (
               <div key={h.id} style={S.historyRow}>
+                <OrderFoodStrip items={h.items} size="sm" />
                 <div style={S.historyHead}>
                   <span>
                     #{h.id} · {h.fulfillment === 'delivery' ? '🛵 Delivery' : '🏃 Pickup'}

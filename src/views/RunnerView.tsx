@@ -1,3 +1,4 @@
+import OrderFoodStrip from '../components/OrderFoodStrip';
 import { RUNNERS } from '../data/constants';
 import { S } from '../styles/venueStyles';
 import type { Order, OrderStatus, RunnerIdentity } from '../types/venue';
@@ -74,6 +75,7 @@ export default function RunnerView({ orders, claimOrder, updateStatus, runnerIde
                   <div style={S.deliveryBadge}>🛵 UNCLAIMED</div>
                 </div>
                 <div style={S.deliveryMeta}>{order.seat}</div>
+                <OrderFoodStrip items={order.items} size="sm" />
                 <div style={S.orderItems}>
                   {order.items.map((i, idx) => (
                     <div key={idx}>
@@ -112,6 +114,7 @@ export default function RunnerView({ orders, claimOrder, updateStatus, runnerIde
                   <div style={S.deliveryBadge}>🛵 EN ROUTE</div>
                 </div>
                 <div style={S.deliveryMeta}>{order.seat}</div>
+                <OrderFoodStrip items={order.items} size="sm" />
                 <div style={S.orderItems}>
                   {order.items.map((i, idx) => (
                     <div key={idx}>

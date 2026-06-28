@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import OrderFoodStrip from '../components/OrderFoodStrip';
 import { S } from '../styles/venueStyles';
 import type { Fulfillment, Order, OrderStatus } from '../types/venue';
 import { fmtMoney, fmtTime } from '../utils/format';
@@ -133,6 +134,7 @@ export default function StaffView({ orders, updateStatus }: StaffViewProps) {
                       : `${order.seat} · awaiting runner`}
                   </div>
                 )}
+                <OrderFoodStrip items={order.items} size="sm" />
                 <div style={S.orderItems}>
                   {order.items.map((i, idx) => (
                     <div key={idx}>

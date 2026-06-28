@@ -1,24 +1,28 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import FoodImage from './FoodImage';
+
+const img = (id: string) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&h=500&q=90`;
 
 const SLIDES = [
   {
-    image: '/images/hero-concessions.jpg',
+    image: img('photo-1555939594-58d7cb561ad1'),
     tagline: 'Game night cravings',
     sub: 'Hot food. Cold drinks. Delivered to your seat.',
-    mood: 'food',
+    mood: 'food' as const,
   },
   {
-    image: '/images/hero-food.jpg',
+    image: img('photo-1513456852971-30c0ba1c4844'),
     tagline: 'Stack it high',
     sub: 'Nachos, burgers, tenders — straight from the kitchen.',
-    mood: 'food',
+    mood: 'food' as const,
   },
   {
-    image: '/images/hero-drinks.jpg',
+    image: img('photo-1535958636474-b021ee887b13'),
     tagline: 'Ice-cold refreshment',
     sub: 'Craft beer, seltzers & sodas — frosted and ready.',
-    mood: 'drink',
+    mood: 'drink' as const,
   },
 ];
 
@@ -42,18 +46,16 @@ export default function FoodHero() {
           exit={{ opacity: 0, scale: 1.04 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          <img
+          <FoodImage
             src={slide.image}
             alt=""
             className="h-full w-full object-cover"
-            loading="eager"
-            fetchPriority="high"
           />
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(180deg, rgba(6,12,24,0.15) 0%, rgba(6,12,24,0.55) 50%, rgba(6,12,24,0.92) 100%)',
+                'linear-gradient(180deg, rgba(6,12,24,0.1) 0%, rgba(6,12,24,0.5) 50%, rgba(6,12,24,0.92) 100%)',
             }}
           />
           {slide.mood === 'food' && (

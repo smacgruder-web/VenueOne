@@ -1,6 +1,7 @@
 import type { EventStats, MenuItem } from '../types/venue';
 
-const menuImg = (slug: string) => `/images/menu/${slug}.jpg`;
+const img = (id: string, w = 600, h = 400) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=85`;
 
 export const MENU: MenuItem[] = [
   {
@@ -9,7 +10,7 @@ export const MENU: MenuItem[] = [
     desc: 'All-beef frank, mustard, relish',
     price: 7.0,
     emoji: '🌭',
-    image: menuImg('stadium-dog'),
+    image: img('photo-1612392062631-ef0a0bf0b85e'),
     cat: 'Food',
     popular: true,
   },
@@ -19,7 +20,7 @@ export const MENU: MenuItem[] = [
     desc: 'Chips, cheddar, jalapeños',
     price: 9.5,
     emoji: '🧀',
-    image: menuImg('nachos'),
+    image: img('photo-1513456852971-30c0ba1c4844'),
     cat: 'Food',
     popular: true,
   },
@@ -29,7 +30,7 @@ export const MENU: MenuItem[] = [
     desc: 'Salted, with cheese dip',
     price: 6.5,
     emoji: '🥨',
-    image: menuImg('pretzel'),
+    image: img('photo-1588195538326-5cf0f46e14b2'),
     cat: 'Food',
   },
   {
@@ -38,7 +39,7 @@ export const MENU: MenuItem[] = [
     desc: '1/3 lb beef, LTO, special sauce',
     price: 12.0,
     emoji: '🍔',
-    image: menuImg('burger'),
+    image: img('photo-1568901346375-23c9450c58cd'),
     cat: 'Food',
     popular: true,
   },
@@ -48,7 +49,7 @@ export const MENU: MenuItem[] = [
     desc: '3-piece, honey mustard',
     price: 10.5,
     emoji: '🍗',
-    image: menuImg('chicken-tenders'),
+    image: img('photo-1626082927389-6cd097cdc6ec'),
     cat: 'Food',
   },
   {
@@ -57,7 +58,7 @@ export const MENU: MenuItem[] = [
     desc: 'Pepperoni or cheese',
     price: 5.5,
     emoji: '🍕',
-    image: menuImg('pizza-slice'),
+    image: img('photo-1513104890138-7c749659a591'),
     cat: 'Food',
   },
   {
@@ -66,7 +67,7 @@ export const MENU: MenuItem[] = [
     desc: 'Bud, Miller, Coors — 16oz',
     price: 9.0,
     emoji: '🍺',
-    image: menuImg('domestic-beer'),
+    image: img('photo-1608270582010-4db9fbb70fbf'),
     cat: 'Drinks',
     popular: true,
   },
@@ -76,7 +77,7 @@ export const MENU: MenuItem[] = [
     desc: 'Local IPA — 16oz',
     price: 11.0,
     emoji: '🍻',
-    image: menuImg('craft-beer'),
+    image: img('photo-1535958636474-b021ee887b13'),
     cat: 'Drinks',
   },
   {
@@ -85,7 +86,7 @@ export const MENU: MenuItem[] = [
     desc: 'White Claw variety — 12oz',
     price: 8.5,
     emoji: '🥂',
-    image: menuImg('hard-seltzer'),
+    image: img('photo-1629206004482-670d35f39592'),
     cat: 'Drinks',
   },
   {
@@ -94,7 +95,7 @@ export const MENU: MenuItem[] = [
     desc: 'Pepsi, Diet Pepsi, Mountain Dew',
     price: 5.0,
     emoji: '🥤',
-    image: menuImg('soda'),
+    image: img('photo-1622483760538-83903c4f6cbb'),
     cat: 'Drinks',
   },
   {
@@ -103,7 +104,7 @@ export const MENU: MenuItem[] = [
     desc: 'Dasani 20oz',
     price: 4.0,
     emoji: '💧',
-    image: menuImg('water'),
+    image: img('photo-1548839140-5a941f83ab48'),
     cat: 'Drinks',
   },
   {
@@ -112,7 +113,7 @@ export const MENU: MenuItem[] = [
     desc: 'Fries, bacon, cheddar, sour cream',
     price: 8.5,
     emoji: '🍟',
-    image: menuImg('loaded-fries'),
+    image: img('photo-1573080496219-a597967a65d0'),
     cat: 'Food',
   },
 ];
