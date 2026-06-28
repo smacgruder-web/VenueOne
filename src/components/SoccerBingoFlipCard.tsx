@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, type MouseEvent } from 'react';
 
 interface SoccerBingoFlipCardProps {
   onPlay: () => void;
@@ -10,27 +10,26 @@ const MINI_EVENTS = ['⚽', '🟨', '🚩', '🧤', '⭐', 'FREE', '📣', '🎯
 export default function SoccerBingoFlipCard({ onPlay }: SoccerBingoFlipCardProps) {
   const [flipped, setFlipped] = useState(false);
 
-  const handlePlay = () => {
+  const handlePlay = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setFlipped(false);
     onPlay();
   };
 
   return (
-    <article className={`soccer-bingo-flip ${flipped ? 'is-flipped' : ''}`}>
-      <div className="soccer-bingo-flip-inner">
-        <div className="soccer-bingo-flip-face soccer-bingo-flip-front">
-          <button
-            type="button"
-            className="soccer-bingo-flip-tap"
-            onClick={() => setFlipped(true)}
-            aria-label="Flip Soccer Bingo card"
-          >
-            <div
-              className="soccer-bingo-flip-photo"
-              style={{ backgroundImage: "url('/images/soccer-ball.png')" }}
-            />
-            <div className="soccer-bingo-flip-scrim" />
-          </button>
+    <article className="soccer-bingo-flip">
+      <div className={`soccer-bingo-flip-inner ${flipped ? 'is-flipped' : ''}`}>
+        <button
+          type="button"
+          className="soccer-bingo-flip-face soccer-bingo-flip-front"
+          onClick={() => setFlipped(true)}
+          aria-label="Flip Soccer Bingo card"
+        >
+          <div
+            className="soccer-bingo-flip-photo"
+            style={{ backgroundImage: "url('/images/soccer-ball.png')" }}
+          />
+          <div className="soccer-bingo-flip-scrim" />
           <span className="soccer-bingo-flip-hint">Tap to flip</span>
           <div className="soccer-bingo-flip-caption">
             <div className="soccer-bingo-flip-info">
@@ -38,12 +37,12 @@ export default function SoccerBingoFlipCard({ onPlay }: SoccerBingoFlipCardProps
               <p>Flip for prizes</p>
             </div>
           </div>
-        </div>
+        </button>
 
         <div className="soccer-bingo-flip-face soccer-bingo-flip-back">
           <button
             type="button"
-            className="soccer-bingo-flip-tap soccer-bingo-flip-tap--back"
+            className="soccer-bingo-flip-back-tap"
             onClick={() => setFlipped(false)}
             aria-label="Flip card back to front"
           />
@@ -71,8 +70,12 @@ export default function SoccerBingoFlipCard({ onPlay }: SoccerBingoFlipCardProps
           </div>
 
           <div className="soccer-bingo-flip-caption soccer-bingo-flip-caption--back">
-            <button type="button" className="soccer-bingo-flip-info soccer-bingo-flip-info--back" onClick={() => setFlipped(false)}>
-              <span className="soccer-bingo-flip-back-link">↩ Tap card to flip</span>
+            <button
+              type="button"
+              className="soccer-bingo-flip-info soccer-bingo-flip-info--back"
+              onClick={() => setFlipped(false)}
+            >
+              <span className="soccer-bingo-flip-back-link">↩ Flip back</span>
             </button>
             <motion.button
               type="button"
