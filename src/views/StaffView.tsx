@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { S } from '../styles/venueStyles';
 import type { Fulfillment, Order, OrderStatus } from '../types/venue';
@@ -39,7 +40,7 @@ export default function StaffView({ orders, updateStatus }: StaffViewProps) {
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
           {newCount > 0 && (
-            <div
+            <motion.div
               style={{
                 background: '#F5A623',
                 color: '#0A0F1E',
@@ -48,9 +49,12 @@ export default function StaffView({ orders, updateStatus }: StaffViewProps) {
                 padding: '6px 12px',
                 borderRadius: 8,
               }}
+              animate={{ scale: [1, 1.08, 1] }}
+              transition={{ duration: 1.2, repeat: Infinity }}
+              className="glow-accent"
             >
               {newCount} NEW
-            </div>
+            </motion.div>
           )}
           <div
             style={{
@@ -96,11 +100,19 @@ export default function StaffView({ orders, updateStatus }: StaffViewProps) {
         </div>
       ) : (
         <div style={S.orderGrid}>
-          {active.map((order) => {
+          {active.map((order, index) => {
             const action = nextAction(order);
             const isDelivery = order.fulfillment === 'delivery';
             return (
-              <div key={order.id} style={S.orderCard(order.status)}>
+              <motion.div
+                key={order.id}
+                style={S.orderCard(order.status)}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: index * 0.05, type: 'spring', stiffness: 300, damping: 24 }}
+                layout
+                className="glass-card"
+              >
                 <div style={S.orderCardHead}>
                   <div>
                     <div style={S.orderId}>#{order.id}</div>
@@ -130,14 +142,16 @@ export default function StaffView({ orders, updateStatus }: StaffViewProps) {
                 </div>
                 <div style={S.orderTotal}>{fmtMoney(order.total)}</div>
                 {action && (
-                  <button
+                  <motion.button
                     style={S.actionBtn(order.status)}
                     onClick={() => updateStatus(order.id, action.next)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
                   >
                     {action.label}
-                  </button>
+                  </motion.button>
                 )}
-              </div>
+              </motion.div>
             );
           })}
         </div>

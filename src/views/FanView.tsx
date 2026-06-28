@@ -1,4 +1,6 @@
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import MotionSheet from '../components/MotionSheet';
 import { MENU, SECTIONS, DELIVERY_FEE } from '../data/constants';
 import { S } from '../styles/venueStyles';
 import type { CartItem, FanIdentity, Fulfillment, Order } from '../types/venue';
@@ -139,7 +141,19 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
   return (
     <div style={S.fanWrap}>
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} } @keyframes flash { 0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,0)} 50%{box-shadow:0 0 0 3px rgba(245,166,35,0.35)} } @keyframes toastIn { from{opacity:0; transform:translate(-50%,-8px)} to{opacity:1; transform:translate(-50%,0)} } ::-webkit-scrollbar{display:none}`}</style>
-      {toast && <div style={S.toast}>🔔 {toast}</div>}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            style={S.toast}
+            initial={{ opacity: 0, y: -12, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+          >
+            🔔 {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {confirmedOrder ? (
         <>
@@ -155,9 +169,29 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
             </div>
             <div style={S.fanTitle}>In-Venue Order</div>
           </div>
-          <div style={S.confirmWrap}>
-            <div style={S.bigEmoji}>{statusIcon}</div>
-            <div style={S.confirmTitle}>{statusTitle}</div>
+          <motion.div
+            style={S.confirmWrap}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+          >
+            <motion.div
+              style={S.bigEmoji}
+              key={statusIcon}
+              initial={{ scale: 0, rotate: -20 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 14 }}
+            >
+              {statusIcon}
+            </motion.div>
+            <motion.div
+              style={S.confirmTitle}
+              key={statusTitle}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {statusTitle}
+            </motion.div>
             <div style={S.confirmSub}>{statusSub}</div>
 
             {isDelivery ? (
@@ -213,14 +247,17 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
               {confirmedOrder.tip > 0 ? ` + ${fmtMoney(confirmedOrder.tip)} tip` : ''}
             </div>
             {canOrderAgain && (
-              <button
+              <motion.button
                 style={{ ...S.payBtn, marginTop: 24, maxWidth: 280 }}
                 onClick={() => setActiveOrderId(null)}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="glow-accent"
               >
                 Order Again
-              </button>
+              </motion.button>
             )}
-          </div>
+          </motion.div>
         </>
       ) : (
         <>
@@ -277,13 +314,19 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
             ))}
           </div>
           <div style={S.menuGrid}>
-            {filtered.map((item) => {
+            {filtered.map((item, index) => {
               const qty = cart[item.id] || 0;
               return (
-                <div
+                <motion.div
                   key={item.id}
                   style={S.menuCard(qty > 0)}
                   onClick={() => qty === 0 && setQty(item.id, 1)}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.04, duration: 0.3 }}
+                  whileHover={{ scale: 1.02, boxShadow: '0 4px 20px rgba(245,166,35,0.15)' }}
+                  whileTap={{ scale: 0.98 }}
+                  className={qty > 0 ? 'glow-accent' : ''}
                 >
                   <div style={S.menuEmoji}>{item.emoji}</div>
                   <div style={S.menuInfo}>
@@ -323,25 +366,27 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                       +
                     </div>
                   )}
-                </div>
+                </motion.div>
               );
             })}
           </div>
           <div style={{ height: 80 }} />
           <div style={S.cartBar}>
-            <button
+            <motion.button
               style={S.cartBtn(cartCount > 0)}
               onClick={() => cartCount > 0 && setShowCheckout(true)}
+              whileHover={cartCount > 0 ? { scale: 1.02 } : {}}
+              whileTap={cartCount > 0 ? { scale: 0.98 } : {}}
+              animate={cartCount > 0 ? { boxShadow: ['0 0 0px rgba(245,166,35,0)', '0 0 20px rgba(245,166,35,0.4)', '0 0 0px rgba(245,166,35,0)'] } : {}}
+              transition={cartCount > 0 ? { duration: 2, repeat: Infinity } : {}}
             >
               {cartCount > 0
                 ? `Review Order · ${fmtMoney(grandTotal)} (${cartCount} item${cartCount > 1 ? 's' : ''})`
                 : 'Add items to order'}
-            </button>
+            </motion.button>
           </div>
 
-          {showCheckout && (
-            <div style={S.overlay} onClick={() => setShowCheckout(false)}>
-              <div style={S.sheet} onClick={(e) => e.stopPropagation()}>
+          <MotionSheet open={showCheckout} onClose={() => setShowCheckout(false)}>
                 <div style={S.sheetTitle}>Your Order</div>
                 {cartItems.map((i) => (
                   <div key={i.id} style={S.lineItem}>
@@ -403,18 +448,20 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                     </>
                   )}
                 </div>
-                <button style={S.payBtn} onClick={placeOrder}>
+                <motion.button
+                  style={S.payBtn}
+                  onClick={placeOrder}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="glow-accent"
+                >
                   Pay with Apple Pay / Card →
-                </button>
-              </div>
-            </div>
-          )}
+                </motion.button>
+          </MotionSheet>
         </>
       )}
 
-      {showHistory && (
-        <div style={S.overlay} onClick={() => setShowHistory(false)}>
-          <div style={S.sheet} onClick={(e) => e.stopPropagation()}>
+      <MotionSheet open={showHistory} onClose={() => setShowHistory(false)}>
             <div style={S.sheetTitle}>My Orders</div>
             {history.length === 0 && <div style={S.historyEmpty}>No orders yet tonight.</div>}
             {history.map((h) => (
@@ -435,9 +482,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                 </button>
               </div>
             ))}
-          </div>
-        </div>
-      )}
+      </MotionSheet>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 interface SparklineProps {
   buckets: number[];
   color: string;
@@ -24,17 +26,35 @@ export default function Sparkline({ buckets, color, emptyText }: SparklineProps)
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: 100, display: 'block' }}>
-      <polygon points={areaStr} fill={`${color}22`} />
-      <polyline
+      <motion.polygon
+        points={areaStr}
+        fill={`${color}22`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      />
+      <motion.polyline
         points={lineStr}
         fill="none"
         stroke={color}
         strokeWidth="2.5"
         strokeLinejoin="round"
         strokeLinecap="round"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 1.2, ease: 'easeOut' }}
       />
       {pts.map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="3" fill={color} />
+        <motion.circle
+          key={i}
+          cx={x}
+          cy={y}
+          r="3"
+          fill={color}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.8 + i * 0.05, type: 'spring', stiffness: 400 }}
+        />
       ))}
     </svg>
   );

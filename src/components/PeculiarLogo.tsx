@@ -21,37 +21,55 @@ interface PeculiarLogoProps {
 
 export default function PeculiarLogo({ size = 32 }: PeculiarLogoProps) {
   return (
-    <motion.div
-      className="shrink-0"
-      style={{ width: size, height: size }}
-      animate={{ rotate: 360 }}
-      transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-      aria-hidden
-    >
-      <svg viewBox="0 0 32 32" width={size} height={size}>
-        <circle cx="16" cy="18" r="11" fill="none" stroke="#1E2A3A" strokeWidth="1" opacity="0.6" />
-        {EDGES.map(([a, b], i) => (
-          <line
-            key={i}
-            x1={NODES[a].x}
-            y1={NODES[a].y}
-            x2={NODES[b].x}
-            y2={NODES[b].y}
-            stroke="url(#peculiarGrad)"
-            strokeWidth="1.2"
-            opacity="0.85"
-          />
-        ))}
-        {NODES.map((n, i) => (
-          <circle key={i} cx={n.x} cy={n.y} r="2.2" fill={n.color} />
-        ))}
-        <defs>
-          <linearGradient id="peculiarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0EA5A0" />
-            <stop offset="100%" stopColor="#F97316" />
-          </linearGradient>
-        </defs>
-      </svg>
-    </motion.div>
+    <div className="relative shrink-0" style={{ width: size, height: size }} aria-hidden>
+      <motion.div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(245,166,35,0.25) 0%, transparent 70%)',
+        }}
+        animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.8, 0.4] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="relative"
+        style={{ width: size, height: size }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
+      >
+        <svg viewBox="0 0 32 32" width={size} height={size}>
+          <circle cx="16" cy="18" r="11" fill="none" stroke="url(#peculiarGrad)" strokeWidth="1" opacity="0.5" />
+          {EDGES.map(([a, b], i) => (
+            <line
+              key={i}
+              x1={NODES[a].x}
+              y1={NODES[a].y}
+              x2={NODES[b].x}
+              y2={NODES[b].y}
+              stroke="url(#peculiarGrad)"
+              strokeWidth="1.2"
+              opacity="0.9"
+            />
+          ))}
+          {NODES.map((n, i) => (
+            <motion.circle
+              key={i}
+              cx={n.x}
+              cy={n.y}
+              r="2.2"
+              fill={n.color}
+              animate={{ scale: [1, 1.4, 1] }}
+              transition={{ duration: 2, delay: i * 0.2, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          ))}
+          <defs>
+            <linearGradient id="peculiarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#0EA5A0" />
+              <stop offset="50%" stopColor="#F5A623" />
+              <stop offset="100%" stopColor="#F97316" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </motion.div>
+    </div>
   );
 }

@@ -1,14 +1,21 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import PeculiarLogo from './components/PeculiarLogo';
+import AmbientBackground from './components/AmbientBackground';
+import NavBar from './components/NavBar';
 import { useFanIdentity } from './hooks/useFanIdentity';
 import { useRunnerIdentity } from './hooks/useRunnerIdentity';
 import { useVenueState } from './hooks/useVenueState';
-import { S } from './styles/venueStyles';
 import type { ViewId } from './types/venue';
 import AnalyticsView from './views/AnalyticsView';
 import FanView from './views/FanView';
 import RunnerView from './views/RunnerView';
 import StaffView from './views/StaffView';
+
+const viewVariants = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
+};
 
 export default function App() {
   const [view, setView] = useState<ViewId>('fan');
@@ -23,43 +30,42 @@ export default function App() {
     document.title = 'Venue One — Riverside Arena';
   }, []);
 
-  const navItems: { id: ViewId; label: string }[] = [
-    { id: 'fan', label: '📱 Fan Order' },
-    { id: 'staff', label: `🎛 Staff${newOrders > 0 ? ` (${newOrders})` : ''}` },
-    { id: 'runners', label: `🛵 Runners${unclaimedCount > 0 ? ` (${unclaimedCount})` : ''}` },
-    { id: 'analytics', label: '📊 GM Analytics' },
+  const navItems = [
+    { id: 'fan' as ViewId, label: '📱 Fan Order' },
+    { id: 'staff' as ViewId, label: '🎛 Staff', badge: newOrders },
+    { id: 'runners' as ViewId, label: '🛵 Runners', badge: unclaimedCount },
+    { id: 'analytics' as ViewId, label: '📊 GM Analytics' },
   ];
 
   return (
-    <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', background: '#060C18', minHeight: '100vh' }}>
-      <nav style={S.nav}>
-        <div style={S.brandBlock}>
-          <PeculiarLogo size={28} />
-          <div style={{ display: 'flex', alignItems: 'baseline' }}>
-            <span style={S.brandMark}>VENUE</span>
-            <span style={S.brandAccent}>ONE</span>
-          </div>
-        </div>
-        {navItems.map((v) => (
-          <button key={v.id} style={S.navBtn(view === v.id)} onClick={() => setView(v.id)}>
-            {v.label}
-          </button>
-        ))}
-      </nav>
+    <div className="relative min-h-screen font-sans text-white">
+      <AmbientBackground />
+      <NavBar view={view} items={navItems} onChange={setView} />
 
-      {view === 'fan' && <FanView onOrder={addOrder} orders={orders} fanIdentity={fanIdentity} />}
-      {view === 'staff' && <StaffView orders={orders} updateStatus={updateStatus} />}
-      {view === 'runners' && (
-        <RunnerView
-          orders={orders}
-          claimOrder={claimOrder}
-          updateStatus={updateStatus}
-          runnerIdentity={runnerIdentity}
-        />
-      )}
-      {view === 'analytics' && (
-        <AnalyticsView orders={orders} stats={eventStats} onReset={resetData} />
-      )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={view}
+          variants={viewVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+        >
+          {view === 'fan' && <FanView onOrder={addOrder} orders={orders} fanIdentity={fanIdentity} />}
+          {view === 'staff' && <StaffView orders={orders} updateStatus={updateStatus} />}
+          {view === 'runners' && (
+            <RunnerView
+              orders={orders}
+              claimOrder={claimOrder}
+              updateStatus={updateStatus}
+              runnerIdentity={runnerIdentity}
+            />
+          )}
+          {view === 'analytics' && (
+            <AnalyticsView orders={orders} stats={eventStats} onReset={resetData} />
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
