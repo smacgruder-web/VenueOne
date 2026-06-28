@@ -74,3 +74,78 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #F5A623;
 }
+
+/* ── Hunger & thirst effects ── */
+
+@keyframes steam-rise {
+  0% { transform: translateY(0) scaleX(1); opacity: 0; }
+  15% { opacity: 0.6; }
+  100% { transform: translateY(-40px) scaleX(1.4); opacity: 0; }
+}
+
+.food-steam::before,
+.food-steam::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, transparent 70%);
+  animation: steam-rise 2.5s ease-out infinite;
+}
+
+.food-steam::after {
+  left: 14px;
+  animation-delay: 0.8s;
+  width: 8px;
+  height: 8px;
+}
+
+@keyframes frost-shimmer {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.35; }
+}
+
+.drink-frost {
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(255,255,255,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(14,165,160,0.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 80%, rgba(255,255,255,0.08) 0%, transparent 40%);
+  animation: frost-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes warm-pulse {
+  0%, 100% { box-shadow: 0 8px 32px rgba(245,166,35,0.15); }
+  50% { box-shadow: 0 12px 40px rgba(245,166,35,0.35); }
+}
+
+.menu-food-card {
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  transition: box-shadow 0.3s ease;
+}
+
+.menu-food-card:hover {
+  animation: warm-pulse 2s ease-in-out infinite;
+}
+
+.cat-pill-food.cat-active {
+  background: linear-gradient(135deg, #F5A623 0%, #E8871E 100%) !important;
+  box-shadow: 0 4px 16px rgba(245,166,35,0.4);
+}
+
+.cat-pill-drinks.cat-active {
+  background: linear-gradient(135deg, #0EA5A0 0%, #0891B2 100%) !important;
+  color: #fff !important;
+  border-color: #0EA5A0 !important;
+  box-shadow: 0 4px 16px rgba(14,165,160,0.4);
+}
+
+.hunger-tagline {
+  background: linear-gradient(90deg, #F8F9FC, #F5A623, #F97316, #F8F9FC);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5s linear infinite;
+}

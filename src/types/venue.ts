@@ -8,6 +8,7 @@ export interface MenuItem {
   desc: string;
   price: number;
   emoji: string;
+  image: string;
   cat: 'Food' | 'Drinks';
   popular?: boolean;
 }

@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import FoodHero from '../components/FoodHero';
+import MenuItemCard from '../components/MenuItemCard';
 import MotionSheet from '../components/MotionSheet';
 import { MENU, SECTIONS, DELIVERY_FEE } from '../data/constants';
 import { S } from '../styles/venueStyles';
@@ -271,9 +273,13 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                 📋 My Orders{history.length > 0 ? ` (${history.length})` : ''}
               </button>
             </div>
-            <div style={S.fanTitle}>Order Food & Drinks</div>
+            <div className="hunger-tagline text-[22px] font-extrabold leading-tight">
+              Order Food & Drinks
+            </div>
             <div style={S.fanSub}>Section {section} · Express pickup or seat delivery</div>
           </div>
+
+          <FoodHero />
 
           <div style={S.fulfillRow}>
             <button
@@ -308,65 +314,37 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
 
           <div style={S.catRow}>
             {cats.map((c) => (
-              <button key={c} style={S.catBtn(cat === c)} onClick={() => setCat(c)}>
-                {c}
+              <button
+                key={c}
+                style={S.catBtn(cat === c)}
+                className={
+                  cat === c
+                    ? c === 'Food'
+                      ? 'cat-pill-food cat-active'
+                      : c === 'Drinks'
+                        ? 'cat-pill-drinks cat-active'
+                        : ''
+                    : ''
+                }
+                onClick={() => setCat(c)}
+              >
+                {c === 'Food' ? '🍔 Food' : c === 'Drinks' ? '🍺 Drinks' : c}
               </button>
             ))}
           </div>
-          <div style={S.menuGrid}>
+          <div className="grid grid-cols-1 gap-3 px-4 py-3 sm:grid-cols-2">
             {filtered.map((item, index) => {
               const qty = cart[item.id] || 0;
               return (
-                <motion.div
+                <MenuItemCard
                   key={item.id}
-                  style={S.menuCard(qty > 0)}
-                  onClick={() => qty === 0 && setQty(item.id, 1)}
-                  initial={{ opacity: 0, x: -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.04, duration: 0.3 }}
-                  whileHover={{ scale: 1.02, boxShadow: '0 4px 20px rgba(245,166,35,0.15)' }}
-                  whileTap={{ scale: 0.98 }}
-                  className={qty > 0 ? 'glow-accent' : ''}
-                >
-                  <div style={S.menuEmoji}>{item.emoji}</div>
-                  <div style={S.menuInfo}>
-                    <div style={S.menuName}>
-                      {item.name}
-                      {item.popular && <span style={S.popularBadge}>POPULAR</span>}
-                    </div>
-                    <div style={S.menuDesc}>{item.desc}</div>
-                    <div style={S.menuPrice}>{fmtMoney(item.price)}</div>
-                  </div>
-                  {qty > 0 ? (
-                    <div style={S.qtyRow} onClick={(e) => e.stopPropagation()}>
-                      <button style={S.qtyBtn} onClick={() => setQty(item.id, -1)}>
-                        −
-                      </button>
-                      <div style={S.qtyNum}>{qty}</div>
-                      <button style={S.qtyBtn} onClick={() => setQty(item.id, 1)}>
-                        +
-                      </button>
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: '50%',
-                        background: '#F5A623',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#0A0F1E',
-                        fontSize: 20,
-                        fontWeight: 700,
-                        flexShrink: 0,
-                      }}
-                    >
-                      +
-                    </div>
-                  )}
-                </motion.div>
+                  item={item}
+                  qty={qty}
+                  index={index}
+                  onAdd={() => setQty(item.id, 1)}
+                  onInc={() => setQty(item.id, 1)}
+                  onDec={() => setQty(item.id, -1)}
+                />
               );
             })}
           </div>
@@ -389,10 +367,17 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
           <MotionSheet open={showCheckout} onClose={() => setShowCheckout(false)}>
                 <div style={S.sheetTitle}>Your Order</div>
                 {cartItems.map((i) => (
-                  <div key={i.id} style={S.lineItem}>
-                    <span>
-                      {i.qty}× {i.name}
-                    </span>
+                  <div key={i.id} style={{ ...S.lineItem, alignItems: 'center', gap: 10 }}>
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={i.image}
+                        alt=""
+                        className="h-10 w-10 rounded-lg object-cover ring-1 ring-[#F5A62344]"
+                      />
+                      <span>
+                        {i.qty}× {i.name}
+                      </span>
+                    </div>
                     <span style={{ color: '#F8F9FC' }}>{fmtMoney(i.price * i.qty)}</span>
                   </div>
                 ))}
