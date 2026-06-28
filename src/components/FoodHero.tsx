@@ -2,27 +2,21 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import FoodImage from './FoodImage';
 
-const unsplash = (id: string) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&h=500&q=90`;
-
-const pexels = (id: number) =>
-  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=900&h=500&fit=crop`;
-
 const SLIDES = [
   {
-    image: unsplash('photo-1555939594-58d7cb561ad1'),
+    image: '/images/hero-game-night.jpg',
     tagline: 'Game night cravings',
     sub: 'Hot food. Cold drinks. Delivered to your seat.',
     mood: 'food' as const,
   },
   {
-    image: pexels(4197096),
+    image: '/images/menu/nachos.jpg',
     tagline: 'Stack it high',
     sub: 'Nachos, burgers, tenders — straight from the kitchen.',
     mood: 'food' as const,
   },
   {
-    image: unsplash('photo-1535958636474-b021ee887b13'),
+    image: '/images/menu/craft-beer.jpg',
     tagline: 'Ice-cold refreshment',
     sub: 'Craft beer, seltzers & sodas — frosted and ready.',
     mood: 'drink' as const,
@@ -49,11 +43,7 @@ export default function FoodHero() {
           exit={{ opacity: 0, scale: 1.04 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          <FoodImage
-            src={slide.image}
-            alt=""
-            className="h-full w-full object-cover"
-          />
+          <FoodImage src={slide.image} alt="" className="h-full w-full object-cover" />
           <div
             className="absolute inset-0"
             style={{
