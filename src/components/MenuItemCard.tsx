@@ -18,7 +18,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
 
   return (
     <motion.article
-      className={`menu-food-card relative overflow-hidden rounded-2xl border border-[#1E2A3A] ${inCart ? 'glow-accent ring-2 ring-[#F5A623]' : ''}`}
+      className={`menu-food-card relative isolate overflow-hidden rounded-2xl border border-[#1E2A3A] ${inCart ? 'glow-accent ring-2 ring-[#F5A623]' : ''}`}
       style={{ minHeight: 148 }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -31,6 +31,7 @@ export default function MenuItemCard({ item, qty, index, onAdd, onInc, onDec }: 
         src={item.image}
         alt={item.name}
         emoji={item.emoji}
+        priority={index < 4}
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
 

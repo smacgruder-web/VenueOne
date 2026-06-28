@@ -6,9 +6,10 @@ interface FoodImageProps {
   className?: string;
   fallback?: string;
   emoji?: string;
+  priority?: boolean;
 }
 
-export default function FoodImage({ src, alt, className = '', fallback, emoji }: FoodImageProps) {
+export default function FoodImage({ src, alt, className = '', fallback, emoji, priority = false }: FoodImageProps) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -24,9 +25,10 @@ export default function FoodImage({ src, alt, className = '', fallback, emoji }:
       src={failed && fallback ? fallback : src}
       alt={alt}
       className={className}
-      loading="lazy"
+      loading={priority ? 'eager' : 'lazy'}
       decoding="async"
-      sizes="(max-width: 640px) 50vw, 280px"
+      fetchPriority={priority ? 'high' : 'auto'}
+      sizes="(max-width: 640px) 50vw, 320px"
       onError={() => setFailed(true)}
     />
   );
