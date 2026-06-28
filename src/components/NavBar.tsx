@@ -14,6 +14,7 @@ interface NavBarProps {
   view: ViewId;
   items: NavItem[];
   onChange: (id: ViewId) => void;
+  onOpenBingo?: () => void;
 }
 
 function NavTab({
@@ -78,7 +79,7 @@ function NavTab({
   );
 }
 
-export default function NavBar({ view, items, onChange }: NavBarProps) {
+export default function NavBar({ view, items, onChange, onOpenBingo }: NavBarProps) {
   return (
     <>
       <header
@@ -98,6 +99,13 @@ export default function NavBar({ view, items, onChange }: NavBarProps) {
             <span className="text-sm font-extrabold tracking-[0.05em] text-[#F5A623]">ONE</span>
           </div>
         </div>
+
+        {view === 'fan' && onOpenBingo && (
+          <button type="button" className="soccer-bingo-header-cta md:mr-3" onClick={onOpenBingo}>
+            <span className="soccer-bingo-header-cta-dot" aria-hidden />
+            ⚽ Soccer Bingo
+          </button>
+        )}
 
         <nav className="relative hidden flex-1 md:flex" aria-label="Main">
           {items.map((item) => (

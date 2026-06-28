@@ -6,6 +6,8 @@ import FoodImage from '../components/FoodImage';
 import MenuItemCard from '../components/MenuItemCard';
 import MenuItemDetailPage from '../components/MenuItemDetailPage';
 import MotionSheet from '../components/MotionSheet';
+import SoccerBingoFlipCard from '../components/SoccerBingoFlipCard';
+import SoccerBingoPage from '../components/SoccerBingoPage';
 import OrderFoodStrip from '../components/OrderFoodStrip';
 import { MENU, SECTIONS, DELIVERY_FEE } from '../data/constants';
 import { S } from '../styles/venueStyles';
@@ -19,9 +21,11 @@ import {
 } from '../utils/cartMods';
 import { getRelatedMenuItems } from '../utils/menuRelated';
 import { fmtMoney, fmtTime } from '../utils/format';
+import { useSoccerBingo } from '../hooks/useSoccerBingo';
 import { playChime } from '../utils/order';
 
 type CartLines = Record<string, { qty: number; mods: ModSelection[] }>;
+type SoccerBingoApi = ReturnType<typeof useSoccerBingo>;
 
 interface FanViewProps {
   onOrder: (
@@ -33,11 +37,23 @@ interface FanViewProps {
   ) => Order;
   orders: Order[];
   fanIdentity: FanIdentity;
+  bingo: SoccerBingoApi;
+  showBingo: boolean;
+  onOpenBingo: () => void;
+  onCloseBingo: () => void;
 }
 
 type CategoryFilter = 'All' | 'Food' | 'Drinks';
 
-export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) {
+export default function FanView({
+  onOrder,
+  orders,
+  fanIdentity,
+  bingo,
+  showBingo,
+  onOpenBingo,
+  onCloseBingo,
+}: FanViewProps) {
   const [cat, setCat] = useState<CategoryFilter>('All');
   const [cartLines, setCartLines] = useState<CartLines>({});
   const [pendingMods, setPendingMods] = useState<Record<number, ModSelection[]>>({});
@@ -72,8 +88,14 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
     setPendingMods((prev) => ({ ...prev, [itemId]: mods }));
   };
   const itemsTotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
-  const cartTotal = itemsTotal + (fulfillment === 'delivery' ? DELIVERY_FEE : 0);
-  const tipAmount = fulfillment === 'delivery' ? Math.round(itemsTotal * tipPct * 100) / 100 : 0;
+  const { activePrize, claimPrize, state: bingoState, toggleCell, simPlay, newGame } = bingo;
+  const prizeDiscount =
+    activePrize?.type === 'five_off' ? Math.min(5, itemsTotal) : 0;
+  const deliveryFee =
+    fulfillment === 'delivery' && activePrize?.type === 'free_delivery' ? 0 : fulfillment === 'delivery' ? DELIVERY_FEE : 0;
+  const discountedItems = Math.max(0, itemsTotal - prizeDiscount);
+  const cartTotal = discountedItems + deliveryFee;
+  const tipAmount = fulfillment === 'delivery' ? Math.round(discountedItems * tipPct * 100) / 100 : 0;
   const grandTotal = cartTotal + tipAmount;
   const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
   const detailItem = detailItemId ? MENU.find((m) => m.id === detailItemId) ?? null : null;
@@ -101,6 +123,7 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
         : null;
     const order = onOrder(cartItems, section, fulfillment, seatInfo, tipAmount);
     trackOrder(order.id);
+    if (activePrize) claimPrize(activePrize.id);
     setShowCheckout(false);
     setCartLines({});
     setPendingMods({});
@@ -322,7 +345,12 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
         <>
           <div style={S.fanHeader}>
             <div style={S.fanHeaderTop}>
-              <LiveEventBadge />
+              <div className="flex items-center gap-2">
+                <LiveEventBadge />
+                <button type="button" className="soccer-bingo-header-cta soccer-bingo-header-cta--compact md:hidden" onClick={onOpenBingo}>
+                  ⚽ Bingo
+                </button>
+              </div>
               <button style={S.historyBtn} onClick={() => setShowHistory(true)}>
                 📋 My Orders{history.length > 0 ? ` (${history.length})` : ''}
               </button>
@@ -387,22 +415,41 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
             ))}
           </div>
           <div className="menu-grid">
-            {filtered.map((item, index) => {
-              const qty = getQty(item.id);
-              return (
-                <MenuItemCard
-                  key={item.id}
-                  item={item}
-                  qty={qty}
-                  index={index}
-                  onOpenDetail={() => setDetailItemId(item.id)}
-                  onAdd={() => setQty(item.id, 1)}
-                  onInc={() => setQty(item.id, 1)}
-                  onDec={() => setQty(item.id, -1)}
-                />
-              );
-            })}
+            {(() => {
+              let foodCount = 0;
+              return filtered.flatMap((item, index) => {
+                const nodes = [];
+                if (item.cat === 'Food') {
+                  if (foodCount === 2) {
+                    nodes.push(<SoccerBingoFlipCard key="soccer-bingo-flip" onPlay={onOpenBingo} />);
+                  }
+                  foodCount += 1;
+                }
+                const qty = getQty(item.id);
+                nodes.push(
+                  <MenuItemCard
+                    key={item.id}
+                    item={item}
+                    qty={qty}
+                    index={index}
+                    onOpenDetail={() => setDetailItemId(item.id)}
+                    onAdd={() => setQty(item.id, 1)}
+                    onInc={() => setQty(item.id, 1)}
+                    onDec={() => setQty(item.id, -1)}
+                  />,
+                );
+                return nodes;
+              });
+            })()}
           </div>
+          <SoccerBingoPage
+            open={showBingo}
+            state={bingoState}
+            onClose={onCloseBingo}
+            onToggleCell={toggleCell}
+            onSimPlay={simPlay}
+            onNewGame={newGame}
+          />
           {detailItem && (
             <MenuItemDetailPage
               item={detailItem}
@@ -459,12 +506,29 @@ export default function FanView({ onOrder, orders, fanIdentity }: FanViewProps) 
                     </div>
                   );
                 })}
+                {activePrize && (
+                  <div style={{ ...S.lineItem, color: '#2ECC71' }}>
+                    <span>🎁 Soccer Bingo · {activePrize.label}</span>
+                    <span>
+                      {activePrize.type === 'five_off'
+                        ? `-${fmtMoney(prizeDiscount)}`
+                        : fulfillment === 'delivery'
+                          ? 'Free delivery'
+                          : 'Apply on delivery'}
+                    </span>
+                  </div>
+                )}
                 {fulfillment === 'delivery' && (
                   <div style={S.lineItem}>
                     <span>🛵 Seat delivery fee</span>
-                    <span style={{ color: '#F8F9FC' }}>{fmtMoney(DELIVERY_FEE)}</span>
+                    <span style={{ color: '#F8F9FC' }}>
+                      {deliveryFee === 0 && activePrize?.type === 'free_delivery'
+                        ? <span style={{ color: '#2ECC71' }}>FREE</span>
+                        : fmtMoney(deliveryFee)}
+                    </span>
                   </div>
                 )}
+
                 {fulfillment === 'delivery' && (
                   <>
                     <div style={S.tipLabel}>Tip your runner</div>

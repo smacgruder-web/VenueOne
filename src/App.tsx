@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import AmbientBackground from './components/AmbientBackground';
 import NavBar from './components/NavBar';
+import { useSoccerBingo } from './hooks/useSoccerBingo';
 import { useFanIdentity } from './hooks/useFanIdentity';
 import { useRunnerIdentity } from './hooks/useRunnerIdentity';
 import { useVenueState } from './hooks/useVenueState';
@@ -19,6 +20,8 @@ const viewVariants = {
 
 export default function App() {
   const [view, setView] = useState<ViewId>('fan');
+  const [showBingo, setShowBingo] = useState(false);
+  const bingo = useSoccerBingo();
   const venueState = useVenueState();
   const fanIdentity = useFanIdentity();
   const runnerIdentity = useRunnerIdentity();
@@ -40,7 +43,15 @@ export default function App() {
   return (
     <div className="app-shell relative min-h-[100dvh] font-sans text-white">
       <AmbientBackground />
-      <NavBar view={view} items={navItems} onChange={setView} />
+      <NavBar
+        view={view}
+        items={navItems}
+        onChange={setView}
+        onOpenBingo={() => {
+          setView('fan');
+          setShowBingo(true);
+        }}
+      />
 
       <main className="app-main">
         <AnimatePresence mode="wait">
@@ -52,7 +63,17 @@ export default function App() {
             exit="exit"
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
-          {view === 'fan' && <FanView onOrder={addOrder} orders={orders} fanIdentity={fanIdentity} />}
+          {view === 'fan' && (
+            <FanView
+              onOrder={addOrder}
+              orders={orders}
+              fanIdentity={fanIdentity}
+              bingo={bingo}
+              showBingo={showBingo}
+              onOpenBingo={() => setShowBingo(true)}
+              onCloseBingo={() => setShowBingo(false)}
+            />
+          )}
           {view === 'staff' && <StaffView orders={orders} updateStatus={updateStatus} />}
           {view === 'runners' && (
             <RunnerView

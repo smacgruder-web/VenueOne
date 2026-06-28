@@ -857,3 +857,399 @@ body {
   -webkit-text-fill-color: transparent;
   animation: shimmer 5s linear infinite;
 }
+
+/* ── Soccer Bingo ── */
+
+.soccer-bingo-header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 166, 35, 0.45);
+  background: linear-gradient(135deg, rgba(245, 166, 35, 0.22), rgba(46, 204, 113, 0.18));
+  padding: 0.35rem 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #f8f9fc;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+
+.soccer-bingo-header-cta--compact {
+  padding: 0.28rem 0.5rem;
+  font-size: 0.62rem;
+}
+
+.soccer-bingo-header-cta-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #2ecc71;
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.8);
+  animation: live-ring 1.4s ease-out infinite;
+}
+
+.soccer-bingo-flip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  perspective: 900px;
+}
+
+.soccer-bingo-flip-inner {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.soccer-bingo-flip.is-flipped .soccer-bingo-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.soccer-bingo-flip-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 2px solid #2ecc71;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.soccer-bingo-flip-front {
+  padding: 0;
+  background: #0a0f1e;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.soccer-bingo-flip-back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.45rem;
+  background: linear-gradient(160deg, #0a1f14 0%, #0a0f1e 100%);
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.soccer-bingo-flip-photo {
+  position: absolute;
+  inset: 0;
+  background-color: #0a1f14;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 55%;
+  filter: saturate(1.1);
+}
+
+.soccer-bingo-flip-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 35%, rgba(6, 12, 24, 0.88) 100%);
+}
+
+.soccer-bingo-flip-hint {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  z-index: 2;
+  border-radius: 9999px;
+  background: rgba(10, 15, 30, 0.75);
+  padding: 0.15rem 0.45rem;
+  font-size: 9px;
+  font-weight: 700;
+  color: #2ecc71;
+}
+
+.soccer-bingo-flip-caption {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.55rem;
+  left: 0.55rem;
+  z-index: 2;
+  text-align: left;
+}
+
+.soccer-bingo-flip-caption h3 {
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.soccer-bingo-flip-caption p {
+  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #2ecc71;
+}
+
+.soccer-bingo-flip-back-title {
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2ecc71;
+}
+
+.soccer-bingo-flip-prizes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f8f9fc;
+}
+
+.soccer-bingo-flip-prizes li + li {
+  margin-top: 0.2rem;
+}
+
+.soccer-bingo-flip-copy {
+  font-size: 0.62rem;
+  line-height: 1.35;
+  color: #8b95a8;
+}
+
+.soccer-bingo-flip-play {
+  margin-top: 0.2rem;
+  min-height: 2.25rem;
+  border: 0;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #2ecc71, #1fa85a);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #04140b;
+  touch-action: manipulation;
+}
+
+.soccer-bingo-flip-back-btn {
+  border: 0;
+  background: transparent;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #8b95a8;
+  touch-action: manipulation;
+}
+
+.soccer-bingo-page {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  display: flex;
+  flex-direction: column;
+  background: #060c18;
+}
+
+.soccer-bingo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(46, 204, 113, 0.25);
+  background: rgba(10, 15, 30, 0.96);
+  padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0.75rem;
+}
+
+.soccer-bingo-kicker {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b95a8;
+}
+
+.soccer-bingo-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.soccer-bingo-close,
+.soccer-bingo-new {
+  min-height: 2.4rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 166, 35, 0.35);
+  background: rgba(17, 24, 39, 0.9);
+  padding: 0 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #f8f9fc;
+  touch-action: manipulation;
+}
+
+.soccer-bingo-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.soccer-bingo-prizes {
+  margin-bottom: 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(46, 204, 113, 0.28);
+  background: rgba(10, 31, 20, 0.55);
+  padding: 0.65rem 0.75rem;
+}
+
+.soccer-bingo-prizes-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2ecc71;
+}
+
+.soccer-bingo-prize-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+}
+
+.soccer-bingo-prize-pill {
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 166, 35, 0.3);
+  background: rgba(245, 166, 35, 0.12);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #f8f9fc;
+}
+
+.soccer-bingo-event {
+  margin-bottom: 0.75rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  background: rgba(17, 24, 39, 0.85);
+  padding: 0.55rem 0.7rem;
+  font-size: 0.82rem;
+  color: #f8f9fc;
+}
+
+.soccer-bingo-event-label {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b95a8;
+}
+
+.soccer-bingo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+  aspect-ratio: 1 / 1;
+  touch-action: manipulation;
+}
+
+.soccer-bingo-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(245, 166, 35, 0.22);
+  background: rgba(17, 24, 39, 0.92);
+  padding: 0.2rem;
+  text-align: center;
+  touch-action: manipulation;
+}
+
+.soccer-bingo-cell-text {
+  font-size: 0.52rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #c9d2e0;
+}
+
+.soccer-bingo-cell--marked {
+  border-color: #2ecc71;
+  background: rgba(10, 31, 20, 0.92);
+}
+
+.soccer-bingo-cell--marked .soccer-bingo-cell-text {
+  color: #fff;
+}
+
+.soccer-bingo-cell--free {
+  border-color: #f5a623;
+  background: rgba(245, 166, 35, 0.18);
+}
+
+.soccer-bingo-stamp {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: rgba(46, 204, 113, 0.85);
+  pointer-events: none;
+}
+
+.soccer-bingo-win {
+  margin-top: 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(46, 204, 113, 0.45);
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.18), rgba(245, 166, 35, 0.12));
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.soccer-bingo-win-title {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.soccer-bingo-win-prize {
+  margin-top: 0.25rem;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #2ecc71;
+}
+
+.soccer-bingo-win-detail,
+.soccer-bingo-win-note {
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  color: #c9d2e0;
+}
+
+.soccer-bingo-sim {
+  margin-top: 0.85rem;
+  width: 100%;
+  min-height: 2.85rem;
+  border: 0;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #f5a623, #e8871e);
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #0a0f1e;
+  touch-action: manipulation;
+}
+
+.soccer-bingo-sim:disabled {
+  opacity: 0.55;
+}
+
+@media (min-width: 768px) {
+  .soccer-bingo-body {
+    max-width: 34rem;
+    margin: 0 auto;
+  }
+
+  .soccer-bingo-cell-text {
+    font-size: 0.62rem;
+  }
+}
